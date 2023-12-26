@@ -1,0 +1,14 @@
+@media screen and (max-width: 426px) {
+    .loginContainerImage {
+        display: none;
+    }
+    .login {
+        width: 100%;
+    }
+    .emailContainer input {
+        width: 85%;
+    }
+    .parol-1 input {
+        width: 75% !important;
+    }
+}

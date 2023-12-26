@@ -1,0 +1,405 @@
+@media screen and (max-width: 768px) {
+    .reponsiveElements {
+        display: none;
+    }
+}
+@media screen and (max-width: 1024px) {
+    .reponsiveElements {
+        display: none;
+    }
+}
+@media screen and (max-width: 1440px) {
+    .reponsiveElements {
+        display: none;
+    }
+}
+@media screen and (max-width: 2560px) {
+    .reponsiveElements {
+        display: none;
+    }
+}
+@media screen and (max-width: 426px) {
+    body {
+        width: 100%;
+    }
+    nav ul {
+        display: none;
+    }
+    .planMaker {
+        display: none;
+    }
+    .navSelect {
+        display: none;
+    }
+    .navDemo {
+        display: none;
+        /* background: none; */
+    }
+    .mobileImage {
+        visibility: visible;
+        opacity: 1;
+        z-index: 10000;
+        position: relative;
+    }
+    .toogle-btn {
+        position: relative;
+        visibility: visible;
+        opacity: 1;
+        z-index: 10000;
+    }
+    .demo {
+        display: none;
+    }
+    .reponsiveElements {
+        display: block;
+    }
+    .mobileInput {
+        width: 80%;
+        margin-top: 10px;
+        height: 48px;
+        border-radius: 5px;
+        border: 1px solid #fff;
+    }
+    .mobileInput input {
+        border: none;
+        outline: none;
+        width: 90%;
+        background: none;
+        height: 100%;
+    }
+    .mobileInput i {
+        font-size: 20px;
+        color: #fff;
+    }
+    .reponsiveElements h1 {
+        color: var(--text-icon-white, #fff);
+        text-align: center;
+        font-size: 32px;
+        font-style: normal;
+        font-weight: 500;
+        line-height: 135%;
+        letter-spacing: -0.32px;
+    }
+    .planLink {
+        border-radius: 4px;
+        background: var(--primary-100, #1c70bb);
+        padding: 15px 20px;
+        color: #fff;
+        margin-top: 10px;
+        display: block;
+    }
+    .toogle-btn {
+        display: block;
+    }
+    .demo2 {
+        display: none;
+    }
+    .demoContainer {
+        display: none;
+    }
+    .root {
+        width: 100%;
+        background-image: url(images/demo2Back.svg);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: -2;
+        height: 120vh;
+        position: relative;
+    }
+    .search {
+        display: none;
+    }
+    nav {
+        padding: 10px 10px;
+        border-bottom: none !important;
+        background-color: #00000069;
+    }
+
+    .root {
+        z-index: -10000;
+        position: relative;
+        top: 0;
+        background-color: #0000003d;
+    }
+    .root::before {
+        content: "";
+        position: absolute;
+        background-image: url(http://127.0.0.1:8000/images/demo2Back.svg);
+        height: 100%;
+        width: 100%;
+        /* z-index: -2; */
+        left: 0;
+        top: 0;
+    }
+    .root::after {
+        content: "";
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        left: 0;
+        top: 0;
+        background-color: #00000069;
+    }
+    .reponsiveElements {
+        position: absolute;
+        flex-direction: column;
+        top: 0;
+        left: 0;
+        visibility: visible;
+        opacity: 1;
+        width: 100%;
+        z-index: -120;
+        height: 90%;
+        z-index: 999;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    .navUser li {
+        display: none !important;
+    }
+    .main {
+        padding: 0 10px;
+    }
+    .attached {
+        width: 100%;
+        height: 60px;
+    }
+    .placesText {
+        padding: 0;
+        font-size: 25px;
+    }
+    .placesContainer {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .placesDetails {
+        width: 90%;
+    }
+    .placeDetainlsContent-1 p {
+        display: flex;
+        align-items: center;
+        width: 150px;
+    }
+    .placeDetailsLink {
+        margin-top: 70px;
+        margin-left: 50px;
+    }
+    .propertiesContainer {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .properties {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    .hotelMainImg {
+        width: 100%;
+    }
+    .propertyLink {
+        margin: 0;
+        margin-left: 70px;
+    }
+    .hotelText {
+        padding: 30px 0;
+        flex-direction: row;
+    }
+    .swiper-slide {
+        width: 100%;
+    }
+    .footerContent-1 {
+        width: 100%;
+    }
+    .footerContent-2 {
+        width: 100%;
+        margin-top: 10px;
+    }
+    .footerContent-3 {
+        width: 100%;
+        margin-top: 20px;
+    }
+    .footerContainer {
+        padding: 30px 20px;
+        text-align: center;
+    }
+    .icons {
+        margin-left: calc(50% - 20%);
+    }
+    .userPageContent {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    /* .mobileImage {
+        display: none;
+    } */
+    /* .toogle-btn i {
+        color: black;
+        font-size: 20px;
+    } */
+    .navDemo-2 {
+        padding: 0;
+    }
+    .navDemo-2 img {
+        height: 30px;
+    }
+    .searchPageIssues h1 {
+        font-size: 20px;
+    }
+    .filterProducts {
+        grid-template-columns: repeat(1, 1fr);
+    }
+    main {
+        position: relative;
+    }
+}
+
+@media screen and (max-width: 376px) {
+    .rewiews {
+        font-size: 13px;
+    }
+    .footerContent-2 {
+        width: 100%;
+        text-align: center;
+    }
+    .footerContent-1 p {
+        text-align: center;
+    }
+    .footerContent-1 img {
+        display: flex;
+    }
+    .footerContainer {
+        padding: 30px 10px;
+        display: flex;
+        justify-content: center !important;
+    }
+    .guideContent {
+        width: 90%;
+    }
+    .guideContent {
+        width: 90%;
+    }
+    .placeDetailsLink {
+        padding: 10px 25px;
+        margin-top: 50px;
+        margin-left: 40px;
+        width: 70%;
+    }
+}
+@media screen and (max-width: 320px) {
+    .placeDetailsLink {
+        margin-top: 60px;
+        margin-left: 30px;
+    }
+    .placesDetails {
+        width: 100%;
+    }
+    .footerContent-1 {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+    }
+    .footerContent-2 {
+        width: 100%;
+        display: flex;
+        justify-content: center !important;
+        margin-top: 10px;
+    }
+    .footerContainer {
+        padding: 10px;
+    }
+    .requestLink {
+        text-align: center;
+    }
+    .guideContent {
+        width: 100%;
+    }
+}
+.Navigation {
+    position: fixed;
+    visibility: hidden;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+    transition: 0.7s;
+    z-index: 11111;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.275);
+}
+.menuContainer {
+    background-color: #fff;
+    transform: translate(-100%);
+    width: 60%;
+    height: 100%;
+    transition: 0.5s;
+    position: fixed;
+    top: 0;
+    visibility: hidden;
+    opacity: 0;
+    left: 0;
+}
+.phoneMenuContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+.phoneMenuContainer li {
+    border-bottom: 1px solid #ccc;
+    font-weight: 900;
+    font-size: 20px;
+    padding: 10px;
+}
+.topMenu {
+    width: 50%;
+    height: 55px;
+    display: flex;
+    gap: 15px;
+    border-bottom: 1px solid #ccc;
+    align-items: center;
+    justify-content: center;
+    background-color: #1c70bb;
+}
+.topMenu i,
+.noName {
+    font-size: 24px;
+    font-weight: 900;
+    color: #fff;
+}
+.drpDwnContainer {
+    position: relative;
+}
+.phoneMenuContainer li a {
+    color: black;
+}
+.drpDwn {
+    visibility: hidden;
+    opacity: 0;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 40px;
+    left: 100px;
+    transition: 0.5s;
+}
+.drpDwnContainer:hover .drpDwn {
+    visibility: visible;
+    opacity: 1;
+}
+.phoneActive {
+    opacity: 1;
+    visibility: visible;
+}
+.phoneActive2 {
+    opacity: 1;
+    visibility: visible;
+    transition: 0.5;
+    transform: translate(0);
+}
+.mobileCloseBtn {
+    border: none;
+    position: fixed;
+    top: 92vh;
+    width: 100%;
+    height: 55px;
+    background-color: #1c70bb;
+    color: #fff;
+    font-size: 20px;
+}
