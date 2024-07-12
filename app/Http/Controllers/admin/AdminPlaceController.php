@@ -11,80 +11,78 @@ use Illuminate\Support\Str;
 
 class AdminPlaceController extends Controller
 {
-    public function places()
-    {
-        $places = new Place;
-        $place = $places->paginate(5);
-        $select2 = 'selected';
-        return view('admin.place.index', compact(['place', 'select2']));
-    }
-    public function addPlace(Request $request)
-    {
-        $request->validate([
-            'name' => ['required'],
-            'about' => ['required'],
-            'price' => ['required'],
-            'location' => ['required'],
-            'safety' => ['required'],
-            'fun' => ['required'],
-            'internet' => ['required'],
-            'image' => ['required'],
-        ]);
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $newFile = time() . "." . $extension;
-        }
-        $safety = 1;
-        if ($request->safety == 'bad') {
-            $safety *= rand(1, 20);
-        } elseif ($request->safety == 'notbad') {
-            $safety *= rand(21, 40);
-        } elseif ($request->safety == 'normal') {
-            $safety *= rand(41, 60);
-        } elseif ($request->safety == "good") {
-            $safety *= rand(61, 80);
-        } else {
-            $safety *= rand(81, 100);
-        }
+    // public function index()
+    // {
+    //     $places = new Place;
+    //     $place = $places->paginate(5);
+    //     $select2 = 'selected';
+    //     return view('admin.place.index', compact(['place', 'select2']));
+    // }
+    // public function store(Request $request){
+    //     $request->validate([
+    //         'name' => ['required'],
+    //         'about' => ['required'],
+    //         'price' => ['required'],
+    //         'location' => ['required'],
+    //         'safety' => ['required'],
+    //         'fun' => ['required'],
+    //         'internet' => ['required'],
+    //         'image' => ['required'],
+    //     ]);
+    //     if ($request->hasFile('image')) {
+    //         $file = $request->file('image');
+    //         $extension = $file->getClientOriginalExtension();
+    //         $newFile = time() . "." . $extension;
+    //     }
+    //     $safety = 1;
+    //     if ($request->safety == 'bad') {
+    //         $safety *= rand(1, 20);
+    //     } elseif ($request->safety == 'notbad') {
+    //         $safety *= rand(21, 40);
+    //     } elseif ($request->safety == 'normal') {
+    //         $safety *= rand(41, 60);
+    //     } elseif ($request->safety == "good") {
+    //         $safety *= rand(61, 80);
+    //     } else {
+    //         $safety *= rand(81, 100);
+    //     }
 
-        $fun = 1;
-        if ($request->fun == 'bad') {
-            $fun *= rand(1, 20);
-        } elseif ($request->fun == 'notbad') {
-            $fun *= rand(21, 40);
-        } elseif ($request->fun == 'normal') {
-            $fun *= rand(41, 60);
-        } elseif ($request->fun == "good") {
-            $fun *= rand(61, 80);
-        } else {
-            $fun *= rand(81, 100);
-        }
-        $insert = Place::create([
-            'name' => $request->name,
-            'about' => $request->about,
-            'price' => $request->price,
-            'location' => $request->location,
-            'safety' => $safety,
-            'fun' => $fun,
-            'internet' => $request->internet,
-            'image' => $newFile,
-        ]);
-        $file->move(public_path('images/imgs'), $newFile);
-        if ($insert) {
-            return back();
-        }
-    }
-    public function deletePlace($id)
-    {
-        $delete = Place::findOrFail($id);
-        $delete->delete();
-        return back();
-    }
-    public function editPlaces($id)
+    //     $fun = 1;
+    //     if ($request->fun == 'bad') {
+    //         $fun *= rand(1, 20);
+    //     } elseif ($request->fun == 'notbad') {
+    //         $fun *= rand(21, 40);
+    //     } elseif ($request->fun == 'normal') {
+    //         $fun *= rand(41, 60);
+    //     } elseif ($request->fun == "good") {
+    //         $fun *= rand(61, 80);
+    //     } else {
+    //         $fun *= rand(81, 100);
+    //     }
+    //     $insert = Place::create([
+    //         'name' => $request->name,
+    //         'about' => $request->about,
+    //         'price' => $request->price,
+    //         'location' => $request->location,
+    //         'safety' => $safety,
+    //         'fun' => $fun,
+    //         'internet' => $request->internet,
+    //         'image' => $newFile,
+    //     ]);
+    //     $file->move(public_path('images/imgs'), $newFile);
+    //     if ($insert) {
+    //         return back();
+    //     }
+    // }
+    // public function destroy($place)
+    // {
+    //     $delete = Place::findOrFail($place)->delete();
+    //     return back();
+    // }
+    public function edit($place)
     {
 
-        $place = Place::findOrFail($id);
+        $place = Place::findOrFail($place);
         $safety = "";
         $fun = "";
         if ($place->safety >= 0 && $place->safety <= 20) {
@@ -111,9 +109,9 @@ class AdminPlaceController extends Controller
         }
         return view('admin.place.editPlace', compact(['place', 'fun', 'safety']));
     }
-    public function editedPlace(Request $request, $id)
+    public function update(Request $request, $place)
     {
-        $editedPlace = Place::findOrFail($id);
+        $editedPlace = Place::findOrFail($place);
         $img = $editedPlace->image;
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -161,21 +159,20 @@ class AdminPlaceController extends Controller
         $editedPlace->update($editArr);
         return back()->with('success', 'Place edited successfully');
     }
-    public function allImages($id)
+    public function index($id)
     {
         $files = PlaceFiles::where('place_id', $id)->get();
         $name = Place::where('id', $id)->first()->name;
-        $id = Place::where('id', $id)->first()->id;
+
         return view('admin.place.images', compact(['files', 'name', 'id']));
     }
-    public function imageAdd(Request $request, $id)
+    public function store(Request $request, $id)
     {
         $request->validate([
             'file' => ['required', 'array'],
             'file.*' => ['required']
         ]);
 
-        $uploadedImages = [];
         foreach ($request->file('file') as $file) {
             $extension = $file->getClientOriginalExtension();
             $newFileName = Str::uuid() . '.' . $extension;
@@ -184,14 +181,16 @@ class AdminPlaceController extends Controller
                 'image' => $newFileName,
                 'place_id' => $id
             ]);
-            $uploadedImages[] = $image;
         }
         return redirect()->back()->with('success', 'Images uploaded successfully.');
     }
-    public function deleteImage($id)
+    public function destroy($id, $image)
     {
-        $image = PlaceFiles::findOrFail($id);
-        $delete = $image->delete();
+        $delete = PlaceFiles::query()
+            ->where('place_id', $id)
+            ->where('id', $image)
+            ->delete();
+
         if ($delete) {
             return back()->with('success', 'Image deleted successfully!');
         }

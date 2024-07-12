@@ -320,4 +320,5 @@ class UserController extends Controller
         $tour = TourPlan::findOrFail($id)->delete();
         return back()->with('success', "Tour deleted successfully");
     }
+
 }

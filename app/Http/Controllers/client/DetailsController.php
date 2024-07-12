@@ -62,20 +62,47 @@ class DetailsController extends Controller
         $element = Property::findOrFail($id);
         $extra = $element->extras;
         $extras = json_decode($extra, true);
-        $images = PropertyFile::where('property_id', $id)->get();
-        $comments = Comment::with('users')->where('entity_id', $id)->where('entity_type', 'property')->get();
-        $recoProperty = Property::inRandomOrder()->limit(4)->get();
-        $bookedProperty = BookProperty::where('user_id', auth()->id())->where('is_active', 0)->where('hotel_id', $id)->get();
+
+        $images = PropertyFile::query()
+            ->where('property_id', $id)
+            ->get();
+
+        $comments = Comment::with('users')
+            ->where('entity_id', $id)
+            ->where('entity_type', 'property')->
+            get();
+
+        $recoProperty = Property::inRandomOrder()
+            ->limit(4)
+            ->get();
+
         $title = $element->name;
+
+        $recGuide = User::query()
+            ->with('guides')
+            ->where('role', 'guide')
+            ->inRandomOrder()
+            ->limit(3)
+            ->get();
+
         if (auth()->user() && auth()->user() != null) {
+
+            $bookedProperty = BookProperty::query()
+                ->where('user_id', auth()->id())
+                ->where('is_active', 0)
+                ->where('hotel_id', $id)
+                ->get();
+
+            // return $bookedProperty;
             $image = User::findOrFail(auth()->id())->image;
-        }
-        $recGuide = User::with('guides')->where('role', 'guide')->inRandomOrder()->limit(3)->get();
-        if (auth()->user() && auth()->user() != null) {
+
             return view('client.details.property.index', compact(['element', 'title', 'recoProperty', 'image', 'bookedProperty', 'extras', 'recGuide', 'comments', 'images']));
-        } else {
-            return view('client.details.property.index', compact(['element', 'title', 'recoProperty', 'extras', 'recGuide', 'comments', 'images']));
         }
+
+        $bookedProperty = null;
+
+        return view('client.details.property.index', compact(['element', 'title', 'recoProperty', 'extras', 'recGuide', 'comments', 'images', 'bookedProperty']));
+
     }
     public function guide($id)
     {

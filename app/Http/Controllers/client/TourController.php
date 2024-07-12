@@ -20,24 +20,47 @@ class TourController extends Controller
         $guideCount = 0;
         $arr = [];
         $guideArr = [];
+
         $places = Place::all();
-        $guides = User::where('role', 'guide')->get();
-        $addedGuides = TourItem::where('entity_type', 'guide')->where('host_id', auth()->id())->where('tour_id', $tourId)->with('guides')->with('guides')->get();
+
+        $guides = User::query()
+            ->where('role', 'guide')
+            ->get();
+
+        $addedGuides = TourItem::where('entity_type', 'guide')
+            ->where('host_id', auth()->id())
+            ->where('tour_id', $tourId)
+            ->with('guides')
+            ->with('guides')
+            ->get();
+
         $tour = TourPlan::findOrFail(request()->id);
-        $addedPlaces = TourItem::where('host_id', auth()->id())->where('entity_type', 'place')->where('tour_id', $tourId)->with('places')->get();
-        $request = HostRequest::where('user_id', auth()->id())->where('tours_id', $tourId)->first();
-        if ($addedPlaces != null) {
+
+        $addedPlaces = TourItem::query()
+            ->where('host_id', auth()->id())
+            ->where('entity_type', 'place')
+            ->where('tour_id', $tourId)
+            ->with('places')
+            ->get();
+
+        $request = HostRequest::query()
+            ->where('user_id', auth()->id())
+            ->where('tours_id', $tourId)
+            ->first();
+
+        if ($addedPlaces != null)
             $count = count($addedPlaces);
-        }
-        if ($addedGuides != null) {
+
+        if ($addedGuides != null)
             $guideCount = count($addedGuides);
-        }
+
         $arr = $places->filter(function ($place) use ($addedPlaces) {
             return !$addedPlaces->contains('entity_id', $place->id);
         });
         $guideArr = $guides->filter(function ($guide) use ($addedGuides) {
             return !$addedGuides->contains('entity_id', $guide->id);
         });
+        
         $placePrice = 0;
         $guidePrice = 0;
         // if ($addedPlaces != null) {
@@ -88,8 +111,8 @@ class TourController extends Controller
             'host_id' => auth()->id(),
             'image' => $newFile
         ]);
-        // $item = TourPlan::where('transport', $transport)->where('travel_places', $places)->where('start_location', $location)->where('end_time', $request->endDate)->where('start_time', $request->startDate)->where('people', $request->people)->where('about', $request->about)->first();
-        // $id = $item->id;
+        //// $item = TourPlan::where('transport', $transport)->where('travel_places', $places)->where('start_location', $location)->where('end_time', $request->endDate)->where('start_time', $request->startDate)->where('people', $request->people)->where('about', $request->about)->first();
+        //// $id = $item->id;
         $id = TourPlan::findOrFail($insert->id);
         if ($insert) {
             return back()->with('id', $id)->with('success', 'You have compleated first step for second step click link.');

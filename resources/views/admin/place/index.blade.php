@@ -2,7 +2,7 @@
     <div class="mainModal">
         <span class="modalCloser">X</span>
         <div class="formContainer">
-            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.places.add')}}">
+            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.places.store')}}">
                 @csrf
                 <div class="form-group">
                     <label for="name">Place Name</label>
@@ -23,30 +23,31 @@
                 </div>
                 <div class="form-group">
                     <label for="safety">Place safety</label>
-                    <select name="safety" class="form-control" id="productRating">
-                        <option value="bad">Bad</option>
-                        <option value="not_bad">Not Bad</option>
-                        <option value="normal">Normal</option>
-                        <option value="good">Good</option>
-                        <option value="great">Great</option>
-                    </select>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBar">0%</div>
+                      </div>
+                      <div class="range-container">
+                        <input type="range" id="rangeInput" min="0" max="100" value="0" step="1" style="width: 100%;">
+                        <input type="hidden" name="safety" class="range-value" id="rangeValue" value="">
+                      </div>
                 </div>
+
                 <div class="form-group">
                     <label for="fun">Place fun</label>
-                    <select name="fun" class="form-control" id="productRating">
-                        <option value="bad">Bad</option>
-                        <option value="notbad">Not Bad</option>
-                        <option value="normal">Normal</option>
-                        <option value="good">Good</option>
-                        <option value="great">Great</option>
-                    </select>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="progressBarForFun">0%</div>
+                    </div>
+                    <div class="range-container">
+                        <input type="range" id="rangeInputForFun" min="0" max="100" value="0" step="1" style="width: 100%;">
+                        <input type="hidden" name="fun" class="range-value" id="rangeValueForFun" value="">
+                    </div>
                 </div>
-               
+
                 <div class="form-group">
                     <label for="internet">Place Internet</label>
                     <input name="internet" type="number" min="1" max="100" class="form-control" id="productPrice" placeholder="Enter product internet">
                 </div>
-               
+
                 <div class="form-group">
                     <label for="image">Product Image</label>
                     <input class="form-control" type="file" name="image"  id="formFile">
@@ -54,7 +55,7 @@
                 <button type="submit" class="btn btn-primary">Add Place</button>
             </form>
         </div>
-    </div>                       
+    </div>
 </div>
 @include('admin.adminParts.header')
 <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
@@ -89,18 +90,14 @@
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <a class="newItemAdder">Add New</a>
-                    
+
                     <table class="table table-hover ">
                         <thead>
                             <tr>
                                 <th scope="col">No</th>
                                 <th scope="col">Name</th>
-                                <th scope="col">About</th>
                                 <th scope="col">Price</th>
                                 <th scope="col">Location</th>
-                                <th scope="col">Internet</th>
-                                <th scope="col">Fun</th>
-                                <th scope="col">Safety</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Actions</th>
                             </tr>
@@ -110,45 +107,48 @@
                             <tr>
                                 <th scope="row">{{$loop->iteration}}</th>
                                 <td>{{$item->name}}</td>
-                                <td style="font-size: 13px">{{$item->about}}</td>
                                 <td>{{$item->price}}$</td>
                                 <td>{{$item->location}}</td>
-                                <td>{{$item->internet}}</td>
-                                <td>
-                                    @if($item->fun>=0 && $item->fun<=20 )
-                                    <span>Bad</span>
-                                    @elseif($item->fun>=21 && $item->fun<=40)
-                                    <span>Not bad</span>
-                                    @elseif($item->fun>=41 && $item->fun<=60)
-                                    <span>Normal</span>
-                                    @elseif($item->fun>=61 && $item->fun<=80)
-                                    <span>Good</span>
-                                    @else
-                                    <span>Great</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    @if($item->safety>=0 && $item->safety<=20 )
-                                    <span>Bad</span>
-                                    @elseif($item->safety>=21 && $item->safety<=40)
-                                    <span>Not bad</span>
-                                    @elseif($item->safety>=41 && $item->safety<=60)
-                                    <span>Normal</span>
-                                    @elseif($item->safety>=61 && $item->safety<=80)
-                                    <span>Good</span>
-                                    @else
-                                    <span>Great</span>
-                                    @endif
-                                </td>
+{{--                                <td>--}}
+{{--                                    @if($item->fun>=0 && $item->fun<=20 )--}}
+{{--                                    <span>Bad</span>--}}
+{{--                                    @elseif($item->fun>=21 && $item->fun<=40)--}}
+{{--                                    <span>Not bad</span>--}}
+{{--                                    @elseif($item->fun>=41 && $item->fun<=60)--}}
+{{--                                    <span>Normal</span>--}}
+{{--                                    @elseif($item->fun>=61 && $item->fun<=80)--}}
+{{--                                    <span>Good</span>--}}
+{{--                                    @else--}}
+{{--                                    <span>Great</span>--}}
+{{--                                    @endif--}}
+{{--                                </td>--}}
+{{--                                <td>--}}
+{{--                                    @if($item->safety>=0 && $item->safety<=20 )--}}
+{{--                                    <span>Bad</span>--}}
+{{--                                    @elseif($item->safety>=21 && $item->safety<=40)--}}
+{{--                                    <span>Not bad</span>--}}
+{{--                                    @elseif($item->safety>=41 && $item->safety<=60)--}}
+{{--                                    <span>Normal</span>--}}
+{{--                                    @elseif($item->safety>=61 && $item->safety<=80)--}}
+{{--                                    <span>Good</span>--}}
+{{--                                    @else--}}
+{{--                                    <span>Great</span>--}}
+{{--                                    @endif--}}
+{{--                                </td>--}}
                                 <td><img class="dataImage" src="{{asset("/images/imgs/$item->image")}}" alt=""></td>
                                 <td>
-                                    <a class="deleteItem" href="{{route('admin.places.deletePlace',['id'=>$item->id])}}">Delete</a>
-                                    <a class="editItem" href="{{route('admin.places.editPlace',['id'=>$item->id])}}">Edit</a>
-                                    <a href="{{route("admin.places.images",['id'=>$item->id])}}" class="allImages">View all images</a>
+                                    <form action="{{ route('admin.places.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="deleteItem">Delete</button>
+                                    </form>
+                                    {{-- <a class="deleteItem" href="{{route('admin.places.destroy', $item->id)}}">Delete</a> --}}
+                                    <a class="editItem" href="{{route('admin.places.edit', $item->id)}}">Edit</a>
+                                    <a href="{{route("admin.places.images.index", $item->id)}}" class="allImages">View all images</a>
                                 </td>
                             </tr>
                             @endforeach
-                           
+
                         </tbody>
                     </table>
                     <div class="pagination-container">
@@ -158,8 +158,8 @@
                             @else
                                 <li><a href="{{ $place->previousPageUrl() }}" rel="prev">&laquo;</a></li>
                             @endif
-                    
-                            
+
+
                             @for ($i = 1; $i <= $place->lastPage(); $i++)
                             @if ($i == $place->currentPage())
                                 <li class="active"><span>{{ $i }}</span></li>
@@ -167,7 +167,7 @@
                                 <li><a href="{{ $place->url($i) }}">{{ $i }}</a></li>
                             @endif
                         @endfor
-                    
+
                             @if ($place->hasMorePages())
                                 <li><a href="{{ $place->nextPageUrl() }}" rel="next">&raquo;</a></li>
                             @else
@@ -181,4 +181,23 @@
     </main>
 </div>
 <script src="{{asset('/admin/js/myJs.js')}}"></script>
+
+<script>
+    function progressBarRange(rangeInput, progressBar, rangeValue){
+        const rangeInputAdd = document.getElementById(rangeInput);
+        const progressBarAdd = document.getElementById(progressBar);
+        const rangeValueAdd = document.getElementById(rangeValue);
+
+        return rangeInputAdd.addEventListener('input', function () {
+          const value = rangeInputAdd.value;
+          progressBarAdd.style.width = value + '%';
+          progressBarAdd.textContent = value + '%';
+          rangeValueAdd.value = value;
+        });
+    }
+
+    progressBarRange('rangeInput', 'progressBar', 'rangeValue')
+    progressBarRange('rangeInputForFun', 'progressBarForFun', 'rangeValueForFun')
+  </script>
+
 @include('admin.adminParts.footer')

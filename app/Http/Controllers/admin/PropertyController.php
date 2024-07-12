@@ -219,6 +219,8 @@ class PropertyController extends Controller
             'washing_machine' => $washing_machine
         ];
         $extras = json_encode($extra);
+
+
         if ($request->hasFile('image')) {
             $file = $request->file('image');
             $extension = $file->getClientOriginalExtension();
@@ -227,6 +229,8 @@ class PropertyController extends Controller
         } else {
             $newFile = $img;
         }
+
+
         $editedArr = [
             'name' => $request->name,
             'description' => $request->description,

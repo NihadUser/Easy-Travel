@@ -87,6 +87,7 @@ const list = document.querySelectorAll("#categoryList li");
 const blogLeftSide=document.querySelector(".blogLeftSide");
 for (let i = 0; i < list.length; i++) {
     list[i].addEventListener("click", async (e) => {
+    
         let h1=document.createElement("h1")
         blogLeftSide.innerHTML='';
         h1.innerHTML=`Our ${list[i]} blogs`

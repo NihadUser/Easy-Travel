@@ -15,13 +15,27 @@ class HomeController extends Controller
     public function index()
     {
         $title = 'Home';
-        if (auth()->user() && auth()->user() != null) {
+
+        if (auth()->user() && auth()->user() != null) 
             $image = User::findOrFail(auth()->id())->image;
-        }
-        $guide = User::with('guides')->with('comments')->with('selections')->where('role', 'guide')->skip(0)->take(6)->get();
-        $places = Place::with('comments')->with('selections')->skip(0)->take(4)->get();
-        $properties = Property::with('comments')->with('selections')->skip(0)->take(4)->get();
+
+        $guide = User::with('guides')
+            ->with('comments')
+            ->with('selections')
+            ->where('role', 'guide')
+            ->skip(0)->take(6)
+            ->get();
+
+        $places = Place::with('comments')
+            ->with('selections')
+            ->skip(0)->take(4)->get();
+
+        $properties = Property::with('comments')
+            ->with('selections')
+            ->skip(0)->take(4)->get();
+
         $tours = TourPlan::where('is_active', 1)->get();
+
         if (auth()->user() && auth()->user() != null) {
             return view('client.home.index', compact(['places', 'title', 'properties', 'image', 'guide', 'tours']));
         } else {

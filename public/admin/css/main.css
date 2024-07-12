@@ -2631,3 +2631,29 @@ table tbody tr td a {
     height: 300px;
     object-fit: cover;
 }
+.progress-container {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.progress-bar {
+    width: 0%;
+    height: 30px;
+    background-color: #4caf50;
+    text-align: center;
+    line-height: 30px;
+    color: white;
+}
+
+.range-container {
+    display: flex;
+    align-items: center;
+}
+
+.range-value {
+    margin-left: 10px;
+    font-size: 1.2em;
+}

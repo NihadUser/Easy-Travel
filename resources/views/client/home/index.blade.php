@@ -1,6 +1,7 @@
 @include('client.clientParts.header')
 @include('client.clientParts.nav')
 <div class="root">
+{{--     {{auth()->user()->role}}--}}
     <div class="rootMain">
         <div class="reponsiveElements">
             <h1>
@@ -12,7 +13,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="rootContent">
         <div class="demoContainer">
             <div class="demo">
@@ -146,7 +147,7 @@
                         </div>
                     </div>
             @endforeach
-       
+
 
         </div>
         <div class="viewMore">
@@ -216,9 +217,9 @@
                     </div>
                 </div>
             </div>
-                
+
             @endforeach
-           
+
         </div>
         <div class="viewMore">
             <a class="moreViews" href="http://127.0.0.1:8000/home/search/property?name=&minPrice=&location=&maxPrice=">View More</a>
@@ -269,7 +270,7 @@
                                             <img src="{{asset('/images/homeStar.svg')}}" alt=""> <span class="rengli">5.0</span>
                                             <span class="rewiews">({{@count($item->comments)}}rewiews)</span>
                                         </span>
-    
+
                                     </div>
                                     <div>
                                         <span>
@@ -283,14 +284,14 @@
                             </div>
                       </div>
                       @endforeach
-                      
+
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
-                
+
             </div>
         </div>
-    </div> 
+    </div>
     <div class="main-3">
         <div class="attached attached-v2">
         </div>
@@ -333,13 +334,13 @@
                         </div>
                       </div>
                       @endforeach
-                      
+
                     </div>
                     <div class="swiper-pagination"></div>
                   </div>
-                
+
                 </div>
-        </div> 
+        </div>
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
@@ -371,8 +372,8 @@
 <script>
     $(document).ready(function() {
         $('.dilVuranRazil').click(function(event) {
-            event.preventDefault(); 
-            
+            event.preventDefault();
+
             var guideId = $(this).data('id');
             var link = $(this).attr('href');
 

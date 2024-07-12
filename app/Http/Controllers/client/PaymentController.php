@@ -32,6 +32,7 @@ class PaymentController extends Controller
             'expiration' => ['required', 'integer'],
             'cvv' => ['required', 'integer'],
         ]);
+
         $insert = BookProperty::create([
             'start_time' => $request->startDate,
             'end_time' => $request->endDate,
@@ -39,6 +40,7 @@ class PaymentController extends Controller
             'hotel_id' => $id,
             'user_id' => auth()->id()
         ]);
+
         if ($insert) {
             return back()->with('success', 'You booked hotel successfully');
         }
@@ -66,7 +68,8 @@ class PaymentController extends Controller
             "state" => ['required'],
             "country" => ['required']
         ]);
-        $guide = new GuideBook;
+
+        $guide = new GuideBook();
         $guide->create([
             'start_date' => $request->startDate,
             'end_date' => $request->endDate,

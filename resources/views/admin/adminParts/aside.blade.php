@@ -11,7 +11,7 @@
             <div class="side-item-container ">
                 <li  class=" side-item" ><a href="{{route('admin.dashboard')}}"><i class="fas fa-angle-right mr-2"></i>Dashboard</a>
                 </li>
-                <li  class="  side-item"><a href="{{route('admin.places.adminPlace')}}"><i class="fas fa-angle-right mr-2"></i>Places</a>
+                <li  class="  side-item"><a href="{{route('admin.places.index')}}"><i class="fas fa-angle-right mr-2"></i>Places</a>
                 </li>
                 <li  class=" side-item "><a href="{{route('admin.properties.property')}}"><i class="fas fa-angle-right mr-2"></i>Properties</a>
                 </li>

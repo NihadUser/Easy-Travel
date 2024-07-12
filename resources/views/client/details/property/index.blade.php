@@ -118,12 +118,13 @@
             </div>
             <div class="placeDetailsRigtSide">
                 <div class="recommendedPlacesLinksContainer">
-                    @if(count($bookedProperty)==0)
+                    @if($bookedProperty == null || count($bookedProperty) == 0)
                     <a href="{{route('payment.index',['id'=>$element->id])}}" class="makeTripPlaceDetails">Book now</a>
                     @else
                     <button class="closedTripPlaceDetails">Booked</button>
                     @endif
                     <a href="" class="savePlaceDetails">Save</a>
+                    
                 </div>
                 <div class="RecomendedPLacesContainer">
                     <h2>Recommended Properties</h2>

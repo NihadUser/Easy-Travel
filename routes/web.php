@@ -1,38 +1,16 @@
 <?php
 
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\admin\AdminBlogController;
-use App\Http\Controllers\admin\AdminController;
-use App\Http\Controllers\admin\AdminPlaceController;
-use App\Http\Controllers\admin\AdminTourController;
-use App\Http\Controllers\admin\AdminUserController;
-use App\Http\Controllers\admin\PropertyController;
-use App\Http\Controllers\admin\RequestController;
 use App\Http\Controllers\client\BlogController;
 use App\Http\Controllers\client\CommentsController;
 use App\Http\Controllers\client\DetailsController;
-use App\Http\Controllers\client\ErrorHandling;
 use App\Http\Controllers\client\HomeController;
 use App\Http\Controllers\client\PaymentController;
 use App\Http\Controllers\client\SearchController;
 use App\Http\Controllers\client\SelectionController;
 use App\Http\Controllers\client\TourController;
 use App\Http\Controllers\client\UserController;
-use App\Http\Controllers\TourPlaceAddController;
 use Illuminate\Support\Facades\Route;
-// use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Exceptions\Handler;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['as' => 'home.', 'prefix' => 'home'], function () {
@@ -53,7 +31,7 @@ Route::group(['as' => 'home.', 'prefix' => 'home'], function () {
     });
     Route::get('/guide-{id}-details', [DetailsController::class, 'guide'])->name('guide');
 });
-Route::group(['as' => 'about.', 'about'], function () {
+Route::group(['as' => 'about.', 'prefix' => 'about'], function () {
     Route::get('/about', [AboutController::class, 'index'])->name('aboutPage');
 });
 Route::group(['as' => 'payment.', 'prefix' => 'payment'], function () {
@@ -106,67 +84,7 @@ Route::group(['as' => 'selection.', 'prefix' => 'selection'], function () {
     Route::get('property', [SelectionController::class, 'propertyFav'])->name('propertyFav');
     Route::get('guide', [SelectionController::class, 'guideFav'])->name('guideFav');
 });
-Route::group(['as' => 'admin.', 'prefix' => 'admin', 'middleware' => 'is_admin'], function () {
-    Route::group(['as' => 'users.', 'prefix' => 'user'], function () {
-        Route::get('/', [AdminUserController::class, 'index'])->name('index');
-        Route::get('/guide-info/{id}', [AdminUserController::class, 'guideInfo'])->name('guideInfo');
-        Route::get('/editRole/{id}', [AdminUserController::class, 'editRole'])->name('editRole');
-        Route::post('/edit/{id}', [AdminUserController::class, 'edit'])->name('edit');
-        Route::get('/block/{id}', [AdminUserController::class, 'block'])->name('block');
-    });
-    Route::group(['as' => 'bookings.', 'prefix' => 'bookings'], function () {
-        Route::get('/', [AdminController::class, 'bookings'])->name('bookings');
-    });
-    Route::group(['as' => 'tours.', 'prefix' => 'tours'], function () {
-        Route::get('/', [AdminTourController::class, 'index'])->name('index');
-        Route::get('/edit/{id}', [AdminTourController::class, 'editPage'])->name('editPage');
-        Route::post('/editTour/{id}', [AdminTourController::class, 'edit'])->name('edit');
-    });
-    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
-    Route::group(['as' => 'places.', 'prefix' => 'places'], function () {
-        Route::get('/', [AdminPlaceController::class, 'places'])->name('adminPlace');
-        Route::post('/add', [AdminPlaceController::class, 'addPlace'])->name('add');
-        Route::get('/delete-{id}', [AdminPlaceController::class, 'deletePlace'])->name('deletePlace');
-        Route::get('/edit-{id}', [AdminPlaceController::class, 'editPlaces'])->name('editPlace');
-        Route::post('/editPlace/{id}', [AdminPlaceController::class, 'editedPlace'])->name('editedPlace');
-        Route::get("/{id}/images", [AdminPlaceController::class, 'allImages'])->name('images');
-        Route::post("/image/add/{id}", [AdminPlaceController::class, 'imageAdd'])->name('image.add');
-        Route::get('/deleteImage/{id}', [AdminPlaceController::class, 'deleteImage'])->name('deleteImage');
-    });
-    Route::group(['as' => 'properties.', 'prefix' => 'properties'], function () {
-        Route::get('/', [PropertyController::class, 'property'])->name('property');
-        Route::post("/propetyInsert", [PropertyController::class, "propetyInsert"])->name('insert');
-        Route::get("/propetyDelete_{id}", [PropertyController::class, "propetyDelete"])->name('delete');
-        Route::get("/edit-{id}", [PropertyController::class, 'edit'])->name('edit');
-        Route::post("/upload-{id}", [PropertyController::class, 'upload'])->name('upload');
-        Route::group(['as' => 'images.', 'prefix' => 'images'], function () {
-            Route::get('/{id}', [PropertyController::class, 'image'])->name('image');
-            Route::post("/insert{id}", [PropertyController::class, 'insert'])->name("insert");
-            Route::get("/delete/{id}", [PropertyController::class, 'deleteImage'])->name('deleteImage');
-        });
-    });
-    Route::group(['as' => 'requests.', 'prefix' => "requests"], function () {
-        Route::get("/", [RequestController::class, 'index'])->name('request');
-        Route::get("/approve-host/{id}", [RequestController::class, 'approve'])->name('approve');
-        Route::get('/aprrove/{id}', [RequestController::class, 'approve2'])->name('approve2');
-        Route::get('/aprroveTour/{id}', [RequestController::class, 'tourApprove'])->name('tourApprove');
-        Route::get('/deleteTour/{id}', [RequestController::class, 'tourDelete'])->name('tourDelete');
-        Route::get('/delete/{id}', [RequestController::class, 'delete'])->name('delete');
-        Route::get('/tour-details/{id}', [RequestController::class, 'tourDetails'])->name("tourDetails");
-    });
-    Route::group(['as' => 'blogs.', 'prefix' => 'blogs'], function () {
-        Route::get('/', [AdminBlogController::class, 'index'])->name('blogs');
-        Route::post("/", [AdminBlogController::class, 'blogAdd'])->name('blogAdd');
-        Route::get("/edit/{id}", [AdminBlogController::class, 'editBlog'])->name('editBlog');
-        Route::post("/insert/{id}", [AdminBlogController::class, 'blogEdit'])->name('blogEdit');
-        Route::group(['as' => 'category.', 'prefix' => 'category'], function () {
-            Route::get('/', [AdminBlogController::class, 'category'])->name('category');
-            Route::post('/', [AdminBlogController::class, 'categoryAdd'])->name('categoryAdd');
-            Route::get('/delete/{id}', [AdminBlogController::class, 'categoryDelete'])->name('categoryDelete');
-        });
-        Route::group(['as' => 'comments.', 'prefix' => 'comments'], function () {
-            Route::get('/{id}', [AdminBlogController::class, 'comments'])->name('comments');
-        });
-    });
-});
+
+
+
 Auth::routes();

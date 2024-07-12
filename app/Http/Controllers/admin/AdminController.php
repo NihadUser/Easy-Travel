@@ -21,11 +21,11 @@ class AdminController extends Controller
         $user = count($users);
         return view('admin.dashboard.index', compact(['user', 'request', 'tour']));
     }
-    public function bookings()
-    {
-        $guide = GuideBook::with('user')->with('guide')->get();
-        $property = BookProperty::with('hotel')->with('person')->get();
-        // return $guide;
-        return view('admin.bookings.index', compact('guide', 'property'));
-    }
+//    public function bookings()
+//    {
+//        $guide = GuideBook::with('user')->with('guide')->get();
+//        $property = BookProperty::with('hotel')->with('person')->get();
+//        // return $guide;
+//        return view('admin.bookings.index', compact('guide', 'property'));
+//    }
 }
