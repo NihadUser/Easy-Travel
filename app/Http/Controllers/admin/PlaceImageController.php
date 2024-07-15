@@ -3,34 +3,34 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Place\Images\StoreRequest;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Admin\Place\Images\{IndexRequest, StoreRequest};
 use App\Models\{Place, PlaceFiles};
 use Illuminate\Support\Str;
 use Illuminate\Contracts\View\{Factory, View};
-use Illuminate\Http;
+
 class PlaceImageController extends Controller
 {
     /**
-     * Summary of index
-     * @param mixed $id
+     * @param IndexRequest $request
      * @return Factory|View
      */
-    public function index($id): Factory|View
+    public function index(IndexRequest $request): Factory|View
     {
-        $files = PlaceFiles::where('place_id', $id)->get();
+        $place_id = $request->get('place_id');
+        $files = PlaceFiles::query()->where('place_id', $place_id)->get();
+        $name = Place::query()->where('id', $place_id)->first()->name;
 
-        $name = Place::where('id', $id)->first()->name;
-
-        return view('admin.place.images', compact(['files', 'name', 'id']));
+        return view('admin.place.images', compact(['files', 'name', 'place_id']));
     }
 
 
     /**
      * @param StoreRequest $request
      * @param $id
-     * @return Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function store(StoreRequest $request, $id): Http\RedirectResponse
+    public function store(StoreRequest $request, $id): RedirectResponse
     {
         $images = [];
 
@@ -45,29 +45,26 @@ class PlaceImageController extends Controller
             ];
         }
 
-        $insert = PlaceFiles::query()
-            ->insert($images);
+        $insert = PlaceFiles::query()->insert($images);
 
-        if ($insert)
+        if ($insert) {
             return back()->with('success', 'Images uploaded successfully.');
+        }
         return back()->with('fail', 'Something went wrong.');
     }
 
 
     /**
      * @param $id
-     * @param $image
-     * @return Http\RedirectResponse
+     * @return RedirectResponse
      */
-    public function destroy($id, $image): Http\RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        $delete = PlaceFiles::query()
-            ->where('place_id', $id)
-            ->where('id', $image)
-            ->delete();
+        $place_file = PlaceFiles::query()->has('place')->findOrFail($id);
 
-        if ($delete)
+        if ($place_file->delete()) {
             return back()->with('success', 'Image deleted successfully!');
+        }
         return back()->with('fail', 'Something went wrong.');
     }
 }

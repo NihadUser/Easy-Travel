@@ -4,13 +4,15 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Comment;
-use App\Models\Selection;
+use Illuminate\Database\Eloquent\Relations\{HasMany, HasOne};
 
 class Place extends Model
 {
     use HasFactory;
-    protected $table = 'places';
+
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name',
         'about',
@@ -20,12 +22,21 @@ class Place extends Model
         'price',
         'location'
     ];
-    public function comments()
+
+    /**
+     * @return HasMany
+     */
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class, 'entity_id')->where('entity_type', 'place');
     }
-    public function selections()
+
+    /**
+     * @return HasOne
+     */
+    public function selections(): HasOne
     {
-        return $this->hasOne(Selection::class, 'entity_id', 'id')->where('entity_type', 'place')->where('user_id', auth()->id());
+        return $this->hasOne(Selection::class, 'entity_id', 'id')
+            ->where('entity_type', 'place')->where('user_id', auth()->id());
     }
 }

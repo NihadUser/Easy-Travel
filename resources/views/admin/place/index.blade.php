@@ -144,7 +144,7 @@
                                     </form>
                                     {{-- <a class="deleteItem" href="{{route('admin.places.destroy', $item->id)}}">Delete</a> --}}
                                     <a class="editItem" href="{{route('admin.places.edit', $item->pId)}}">Edit</a>
-                                    <a href="{{route("admin.places.images.index", $item->pId)}}" class="allImages">View all images</a>
+                                    <a href="{{route("admin.places-images.index") . "?place_id=$item->pId"}}" class="allImages">View all images</a>
                                 </td>
                             </tr>
                             @endforeach

@@ -2,7 +2,7 @@
     <div class="mainModal">
         <span class="modalCloser">X</span>
         <div class="formContainer">
-            <form class="mt-5" multiple enctype="multipart/form-data" method="POST" action="{{route('admin.places.images.store',['id'=>$id])}}">
+            <form class="mt-5" multiple enctype="multipart/form-data" method="POST" action="{{route('admin.places-images.store',['id'=>$place_id])}}">
                 @csrf
                 <div class="form-group">
                     <label for="file[]">Product Image</label>
@@ -11,7 +11,7 @@
                 <button type="submit" class="btn btn-primary">Add Images</button>
             </form>
         </div>
-    </div>                       
+    </div>
 </div>
 @include('admin.adminParts.header')
 <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
@@ -64,7 +64,7 @@
                                     <img class="img-fluid listedImages" src="{{asset("/images/imgs/$item->image")}}" alt="">
                                 </td>
                                 <td>
-                                    <form action="{{ route('admin.places.images.destroy',['id' => $id, 'image' => $item->id]) }}" method="POST">
+                                    <form action="{{ route('admin.places-images.destroy',$item->id) }}" method='POST'>
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="deleteItem">Delete</button>
@@ -73,10 +73,10 @@
                                 </td>
                             </tr>
                             @endforeach
-                           
+
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>

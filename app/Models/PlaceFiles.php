@@ -4,14 +4,26 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class PlaceFiles extends Model
 {
     use HasFactory;
-    protected $table = 'place_files';
+
+    /**
+     * @var array
+     */
     protected $fillable = [
         'image',
         'place_id',
-        'show_home'
+        'show_home',
     ];
+
+    /**
+     * @return HasOne
+     */
+    public function place(): HasOne
+    {
+        return $this->hasOne(Place::class, 'id', 'place_id');
+    }
 }

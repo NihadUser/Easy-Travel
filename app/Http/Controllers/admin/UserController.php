@@ -15,7 +15,7 @@ class UserController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function index()
+    public function index(): Application|Factory|View
     {
         $users = User::query()->paginate(10);
 
@@ -50,11 +50,9 @@ class UserController extends Controller
     public function show($id): Application|Factory|View|RedirectResponse
     {
         $guide = User::query()->findOrFail($id);
-        $languages = json_decode($guide->guides->languages);
-        $places = json_decode($guide->guides->aviable_for);
 
-        if ($guide->role == 'guide') {
-            return view('admin.users.guide', compact('guide', 'places', 'languages'));
+        if ($guide->role == 'guide' && $guide) {
+            return view('admin.users.guide', compact('guide' ));
         }
         return back()->with('error', self::$WRONG);
     }

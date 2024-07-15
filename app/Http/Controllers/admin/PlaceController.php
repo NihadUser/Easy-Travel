@@ -7,7 +7,7 @@ use App\Models\Place;
 use App\Models\PlaceFiles;
 use Exception;
 use Illuminate\Http\{Response, Request, RedirectResponse};
-use App\Http\Requests\Admin\Place\{StoreRequest};
+use App\Http\Requests\Admin\Place\{StoreRequest, UpdateRequest};
 use Illuminate\Contracts\View\{Factory, View};
 use App\Traits\MediaTrait;
 
@@ -88,7 +88,7 @@ class PlaceController extends Controller
      * @param mixed $place
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(Request $request, $place)//: RedirectResponse
+    public function update(UpdateRequest $request, $place): RedirectResponse
     {
         $editedPlace = Place::query()->findOrFail($place);
         $newFile = PlaceFiles::query()
@@ -100,18 +100,7 @@ class PlaceController extends Controller
             $newFile = $this->uploadImage($request->file('image'), 'imgs');
         }
 
-        $editArr = [
-            'name' => $request->name,
-            'about' => $request->about,
-            'price' => $request->price,
-            'location' => $request->location,
-            'safety' => $request->safety,
-            'fun' => $request->fun,
-            'internet' => $request->internet,
-        ];
-
-        $update = $editedPlace->update($editArr);
-
+        $update = $editedPlace->update($request->validated());
 
         PlaceFiles::query()
             ->where('place_id', $editedPlace->id)
@@ -120,9 +109,9 @@ class PlaceController extends Controller
                 'image' => $newFile,
             ]);
 
-        if ($update)
+        if ($update) {
             return back()->with('success', 'Place edited successfully');
-
+        }
         return back()->with('error', 'Something went wrong');
     }
 
@@ -133,7 +122,7 @@ class PlaceController extends Controller
      */
     public function destroy($place): RedirectResponse
     {
-        $delete = Place::findOrFail($place)->delete();
+        $delete = Place::query()->findOrFail($place)->delete();
 
         if($delete)
             return back()->with('success', 'Place deleted successfully');

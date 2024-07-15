@@ -9,7 +9,10 @@
     @include('admin.adminParts.aside')
     <main class="bmd-layout-content">
         <div class="container-fluid ">
-
+        @php
+            $languages = json_decode($guide->guides->languages);
+            $places = json_decode($guide->guides->aviable_for);
+        @endphp
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <div class="page-header breadcrumb-header ">
@@ -50,18 +53,18 @@
                                 <td>
                                     @foreach ($places as $item)
                                         {{$item}}
-                                    @endforeach    
+                                    @endforeach
                                 </td>
                                 <td>
                                     @foreach ($languages as $item)
                                         {{$item}}
-                                    @endforeach    
+                                    @endforeach
                                 </td>
                                </tr>
-                           
+
                         </tbody>
                     </table>
-                   
+
                 </div>
             </div>
         </div>

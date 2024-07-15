@@ -4,7 +4,6 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\admin\{
     AdminBlogController,
     AdminController,
-    AdminPlaceController,
     AdminTourController,
     AdminUserController,
     PropertyController,
@@ -14,18 +13,15 @@ use App\Http\Controllers\admin\{
     UserController,
 };
 
-Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+/* Invokable Controllers */
+Route::get('/dashboard', AdminController::class)->name('dashboard');
 
+/* Routes Resources */
 Route::resources([
     'places' => PlaceController::class,
+    'places-images' => PlaceImageController::class,
     'users' => UserController::class,
-    ]);
-
-Route::group(['as' => 'places.', 'prefix' => 'places/{id}'], function () {
-    Route::resource('images', PlaceImageController::class)->except(['upload', 'edit', 'show']);
-});
-
-
+]);
 
 Route::group(['as' => 'properties.', 'prefix' => 'properties'], function () {
     Route::get('/', [PropertyController::class, 'property'])->name('property');
@@ -74,10 +70,11 @@ Route::group(['as' => 'bookings.', 'prefix' => 'bookings'], function () {
 });
 
 
-Route::get('/notfound', function () {
-    return view('client.errors.404');
-})->name('notfound');
+//Route::get('/notfound', function () {
+//    return view('client.errors.404');
+//});
 
+Route::view('/notfound', 'client.errors.404')->name('notfound');
 
 
 //old routes

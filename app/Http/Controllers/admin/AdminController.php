@@ -3,29 +3,22 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\BookProperty;
-use App\Models\GuideBook;
-use App\Models\TourPlan;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\{Request, User, TourPlan};
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\View\{Factory, View};
 
 class AdminController extends Controller
 {
-    public function index()
+    /**
+     * @return Application|Factory|View
+     */
+    public function __invoke(): Factory|View|Application
     {
-        $users = User::all();
-        $requests = \App\Models\Request::all();
-        $tours = TourPlan::where('is_active', 1)->get();
-        $tour = count($tours);
-        $request = count($requests);
-        $user = count($users);
-        return view('admin.dashboard.index', compact(['user', 'request', 'tour']));
+        $users_count = User::query()->count();
+        $requests_count = Request::query()->count();
+        $tours_count = TourPlan::query()->count();
+
+        return view('admin.dashboard.index', compact(['users_count', 'requests_count', 'tours_count']));
     }
-//    public function bookings()
-//    {
-//        $guide = GuideBook::with('user')->with('guide')->get();
-//        $property = BookProperty::with('hotel')->with('person')->get();
-//        // return $guide;
-//        return view('admin.bookings.index', compact('guide', 'property'));
-//    }
+
 }

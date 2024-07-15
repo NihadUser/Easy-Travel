@@ -46,7 +46,7 @@
                     <div class="box-card mini animate__animated animate__flipInY    "><i
                             class="fab far fa-clock b-second" aria-hidden="true"></i>
                         <span class="c-second">Total Users</span>
-                        <span>{{$user}}</span>
+                        <span>{{ $users_count }}</span>
                         <p class="mt-3 mb-1 text-center"><i class="far fas fa-wifi mr-1 c-second"></i>Your main list
                             is
                             growing</p>
@@ -56,7 +56,7 @@
                     <div class="box-card mini animate__animated animate__flipInY   "><i
                             class="fab far fa-comments b-third" aria-hidden="true"></i>
                         <span class="c-third">Requests</span>
-                        <span>{{$request}}</span>
+                        <span>{{ $requests_count }}</span>
                         <p class="mt-3 mb-1 text-center"><i class="fab fa-whatsapp mr-1 c-third"></i>Your main list
                             is
                             growing</p>
@@ -66,7 +66,7 @@
                     <div class="box-card mini animate__animated animate__flipInY   "><i
                             class="fab far fa-gem b-forth" aria-hidden="true"></i>
                         <span class="c-forth">Active Tours</span>
-                        <span>{{$tour}}</span>
+                        <span>{{ $tours_count }}</span>
                         <p class="mt-3 mb-1 text-center"><i class="fab fa-bluetooth mr-1 c-forth"></i>Your main list
                             is
                             growing</p>
@@ -74,86 +74,86 @@
                 </div>
             </div>
 
-            <div class="row m-2 mb-1">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-2">
-                    <div class="alert  alert-third alert-shade alert-dismissible fade show" role="alert">
-                        <strong>alert-third!</strong> You should check in on some of those fields below.
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
+{{--            <div class="row m-2 mb-1">--}}
+{{--                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 p-2">--}}
+{{--                    <div class="alert  alert-third alert-shade alert-dismissible fade show" role="alert">--}}
+{{--                        <strong>alert-third!</strong> You should check in on some of those fields below.--}}
+{{--                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">--}}
+{{--                            <span aria-hidden="true">×</span>--}}
+{{--                        </button>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
 
 
-            <div class="row m-1">
-                <div class="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">
-                    <div class="card shade h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Mixed Bar/line Chart</h5>
+{{--            <div class="row m-1">--}}
+{{--                <div class="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">--}}
+{{--                    <div class="card shade h-100">--}}
+{{--                        <div class="card-body">--}}
+{{--                            <h5 class="card-title">Mixed Bar/line Chart</h5>--}}
 
-                            <hr>
-                            <canvas id="myChart5"></canvas>
-                            <hr class="hr-dashed">
-                            <p class="text-center c-danger">Example of bar chart</p>
-                        </div>
+{{--                            <hr>--}}
+{{--                            <canvas id="myChart5"></canvas>--}}
+{{--                            <hr class="hr-dashed">--}}
+{{--                            <p class="text-center c-danger">Example of bar chart</p>--}}
+{{--                        </div>--}}
 
-                    </div>
-                </div>
+{{--                    </div>--}}
+{{--                </div>--}}
 
-                <div class="col-xs-1 col-sm-1 col-md-4 col-lg-4 p-2">
-                    <div class="card flat f-first h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Weather Widget</h5>
+{{--                <div class="col-xs-1 col-sm-1 col-md-4 col-lg-4 p-2">--}}
+{{--                    <div class="card flat f-first h-100">--}}
+{{--                        <div class="card-body">--}}
+{{--                            <h5 class="card-title">Weather Widget</h5>--}}
 
-                            <hr>
-                            <a class="weatherwidget-io" href="https://forecast7.com/en/37d5545d08/urmia/"
-                                data-label_1="URMIA" data-label_2="WEATHER" data-icons="Climacons Animated"
-                                data-days="5" data-textcolor="#fafafaad"></a>
-
-
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="row mb-2 m-2">
-                <div class="col-xl-8 col-md-6 col-sm-6 p-2">
-                    <div class="box-dash h-100 pastel animate__animated animate__flipInY b-second   "><i
-                            class="fab far fa-clock" aria-hidden="true"></i>
-
-                        <span>27</span>
-                        <hr class="m-0 ">
-                        <span>Week Visitors</span>
-                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-                <div class="col-xl-4 col-md-6 col-sm-6 p-2">
-                    <div class="box-card h-100 flat f-main animate__animated animate__flipInY   ">
-
-                        <iframe
-                            src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=medium&timezone=Asia%2FTehran"
-                            width="100%" height="115" frameborder="0" seamless></iframe>
-                    </div>
-                </div>
+{{--                            <hr>--}}
+{{--                            <a class="weatherwidget-io" href="https://forecast7.com/en/37d5545d08/urmia/"--}}
+{{--                                data-label_1="URMIA" data-label_2="WEATHER" data-icons="Climacons Animated"--}}
+{{--                                data-days="5" data-textcolor="#fafafaad"></a>--}}
 
 
+{{--                        </div>--}}
 
-            </div>
-            <div class="row m-1">
-                <div class="col-xs-1 col-sm-1 col-md-4 col-lg-4 p-2">
-                    <div class="card shade h-100">
-                        <div class="card-body">
-                            <h5 class="card-title">Doughnut Chart</h5>
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--            </div>--}}
+{{--            <div class="row mb-2 m-2">--}}
+{{--                <div class="col-xl-8 col-md-6 col-sm-6 p-2">--}}
+{{--                    <div class="box-dash h-100 pastel animate__animated animate__flipInY b-second   "><i--}}
+{{--                            class="fab far fa-clock" aria-hidden="true"></i>--}}
 
-                            <hr>
-                            <canvas id="myChart4" width="10" height="11"></canvas>
-                            <hr class="hr-dashed">
-                            <p class="text-center c-danger">Example of Doughnut chart</p>
-                        </div>
+{{--                        <span>27</span>--}}
+{{--                        <hr class="m-0 ">--}}
+{{--                        <span>Week Visitors</span>--}}
+{{--                        <a href="#" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+{{--                <div class="col-xl-4 col-md-6 col-sm-6 p-2">--}}
+{{--                    <div class="box-card h-100 flat f-main animate__animated animate__flipInY   ">--}}
 
-                    </div>
-                </div>
+{{--                        <iframe--}}
+{{--                            src="https://www.zeitverschiebung.net/clock-widget-iframe-v2?language=en&size=medium&timezone=Asia%2FTehran"--}}
+{{--                            width="100%" height="115" frameborder="0" seamless></iframe>--}}
+{{--                    </div>--}}
+{{--                </div>--}}
+
+
+
+{{--            </div>--}}
+{{--            <div class="row m-1">--}}
+{{--                <div class="col-xs-1 col-sm-1 col-md-4 col-lg-4 p-2">--}}
+{{--                    <div class="card shade h-100">--}}
+{{--                        <div class="card-body">--}}
+{{--                            <h5 class="card-title">Doughnut Chart</h5>--}}
+
+{{--                            <hr>--}}
+{{--                            <canvas id="myChart4" width="10" height="11"></canvas>--}}
+{{--                            <hr class="hr-dashed">--}}
+{{--                            <p class="text-center c-danger">Example of Doughnut chart</p>--}}
+{{--                        </div>--}}
+
+{{--                    </div>--}}
+{{--                </div>--}}
                 {{-- <div class="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">
                     <div class="card shade h-100">
                         <div class="card-body">
@@ -221,7 +221,7 @@
 
             </div>
 
-{{-- 
+{{--
             <div class="row m-1">
                 <div class="col-xs-1 col-sm-1 col-md-8 col-lg-8 p-2">
                     <div class="alert col-12  alert-success alert-shade-white bd-side alert-dismissible fade show"
