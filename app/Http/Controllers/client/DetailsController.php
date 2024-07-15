@@ -24,6 +24,7 @@ class DetailsController extends Controller
         $safety = "";
         $fun = "";
         $title = $details->name;
+
         if ($details->safety >= 0 && $details->safety <= 20) {
             $safety = "Bad";
         } elseif ($details->safety >= 21 && $details->safety <= 40) {

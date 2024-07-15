@@ -55,14 +55,19 @@
                                 <td>{{$item->role}}</td>
                                 <td style="display: flex;gap:5px;flex-direction:column; ">
                                     @if($item->role=="guide")
-                                        <a class="allImagesUser" href="{{route('admin.users.guideInfo',['id'=>$item->id])}}">Guide Info</a>
+                                        <a class="allImagesUser" href="{{ route('admin.users.show',$item->id) }}">Guide Info</a>
                                     @endif
-                                    <a  href="{{route('admin.users.editRole',['id'=>$item->id])}}" class="editItem">Change Role</a>
-                                    <a href="{{route('admin.users.block',['id'=>$item->id])}}" class="deleteItem">Block</a>
+                                    <a  href="{{ route('admin.users.edit',$item->id) }}" class="editItem">Change Role</a>
+{{--                                    <a href="{{ route('admin.users.destroy', $item->id }}" class="deleteItem">Block</a>--}}
+                                        <form action="{{ route('admin.users.destroy', $item->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" style="border: none;" class="deleteItem">Delete</button>
+                                        </form>
                                 </td>
                                </tr>
                            @endforeach
-                           
+
                         </tbody>
                     </table>
                     <div class="pagination-container">
@@ -72,8 +77,8 @@
                             @else
                                 <li><a href="{{ $users->previousPageUrl() }}" rel="prev">&laquo;</a></li>
                             @endif
-                    
-                            
+
+
                             @for ($i = 1; $i <= $users->lastPage(); $i++)
                             @if ($i == $users->currentPage())
                                 <li class="active"><span>{{ $i }}</span></li>
@@ -81,7 +86,7 @@
                                 <li><a href="{{ $users->url($i) }}">{{ $i }}</a></li>
                             @endif
                         @endfor
-                    
+
                             @if ($users->hasMorePages())
                                 <li><a href="{{ $users->nextPageUrl() }}" rel="next">&raquo;</a></li>
                             @else

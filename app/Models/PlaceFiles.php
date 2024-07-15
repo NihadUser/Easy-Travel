@@ -11,6 +11,7 @@ class PlaceFiles extends Model
     protected $table = 'place_files';
     protected $fillable = [
         'image',
-        'place_id'
+        'place_id',
+        'show_home'
     ];
 }

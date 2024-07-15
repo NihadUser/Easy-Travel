@@ -97,7 +97,7 @@
                             <div class="form-group">
                                 <label for="image">Product Image</label>
                                 <input class="form-control" type="file" name="image"  id="formFile">
-                                <img style="height: 350px;height:350px;" src="{{asset("/images/imgs/$place->image")}}" class="img-fluid" alt="">
+                                <img style="height: 350px;height:350px;" src="{{asset("/images/imgs/$image")}}" class="img-fluid" alt="">
                             </div>
                             <button type="submit" class="btn btn-primary">Edit Place</button>
                         </form>

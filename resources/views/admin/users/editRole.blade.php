@@ -35,8 +35,9 @@
                     </h1>
                     <h4 class="mt-5">Change Role</h4>
                     <div class="formContainer formContainer-2">
-                        <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.users.edit',['id'=>$user->id])}}">
-                            @csrf
+                        <form method="POST" class="mt-5" action="{{ route('admin.users.update', $user->id ) }}">
+                            {{ csrf_field() }}
+                            {{ method_field('PUT') }}
                             <div class="form-group">
                                 <label for="role">Change role</label>
                                 <select name="role" class="form-control" id="productRating">
@@ -49,7 +50,7 @@
                             <button type="submit" class="btn btn-primary">Change</button>
                         </form>
                     </div>
-                    
+
                 </div>
             </div>
         </div>

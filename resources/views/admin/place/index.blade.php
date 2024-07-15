@@ -137,14 +137,14 @@
 {{--                                </td>--}}
                                 <td><img class="dataImage" src="{{asset("/images/imgs/$item->image")}}" alt=""></td>
                                 <td>
-                                    <form action="{{ route('admin.places.destroy', $item->id) }}" method="POST">
+                                    <form action="{{ route('admin.places.destroy', $item->pId) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="deleteItem">Delete</button>
                                     </form>
                                     {{-- <a class="deleteItem" href="{{route('admin.places.destroy', $item->id)}}">Delete</a> --}}
-                                    <a class="editItem" href="{{route('admin.places.edit', $item->id)}}">Edit</a>
-                                    <a href="{{route("admin.places.images.index", $item->id)}}" class="allImages">View all images</a>
+                                    <a class="editItem" href="{{route('admin.places.edit', $item->pId)}}">Edit</a>
+                                    <a href="{{route("admin.places.images.index", $item->pId)}}" class="allImages">View all images</a>
                                 </td>
                             </tr>
                             @endforeach

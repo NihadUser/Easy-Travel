@@ -16,7 +16,7 @@ class HomeController extends Controller
     {
         $title = 'Home';
 
-        if (auth()->user() && auth()->user() != null) 
+        if (auth()->user() && auth()->user() != null)
             $image = User::findOrFail(auth()->id())->image;
 
         $guide = User::with('guides')
@@ -26,10 +26,16 @@ class HomeController extends Controller
             ->skip(0)->take(6)
             ->get();
 
-        $places = Place::with('comments')
+        $places = Place::query()
+            ->with('comments')
             ->with('selections')
-            ->skip(0)->take(4)->get();
-
+            ->from('places as p')
+            ->select('p.*', 'pf.image as image')
+            ->join('place_files as pf', 'pf.place_id', '=', 'p.id')
+            ->where('pf.show_home', 1)
+            ->skip(0)->take(4)
+            ->get();
+        
         $properties = Property::with('comments')
             ->with('selections')
             ->skip(0)->take(4)->get();

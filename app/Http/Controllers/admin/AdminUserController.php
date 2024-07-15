@@ -13,12 +13,12 @@ class AdminUserController extends Controller
         $users = User::paginate(10);
         return view('admin.users.index', compact(['users']));
     }
-    public function editRole($id)
+    public function edit($id)
     {
         $user = User::findOrFail($id);
         return view('admin.users.editRole', compact('user'));
     }
-    public function edit(Request $request, $id)
+    public function update(Request $request, $id)
     {
         $role = $request->role;
         $user = User::findOrFail($id);

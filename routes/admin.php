@@ -10,48 +10,20 @@ use App\Http\Controllers\admin\{
     PropertyController,
     RequestController,
     PlaceController,
-    PlaceImageController
+    PlaceImageController,
+    UserController,
 };
 
 Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
 
-Route::group(['as' => 'users.', 'prefix' => 'user'], function () {
-    Route::get('/', [AdminUserController::class, 'index'])->name('index');
-    Route::get('/guide-info/{id}', [AdminUserController::class, 'guideInfo'])->name('guideInfo');
-    Route::get('/editRole/{id}', [AdminUserController::class, 'editRole'])->name('editRole');
-    Route::post('/edit/{id}', [AdminUserController::class, 'edit'])->name('edit');
-    Route::get('/block/{id}', [AdminUserController::class, 'block'])->name('block');
-});
-Route::group(['as' => 'bookings.', 'prefix' => 'bookings'], function () {
-    Route::get('/', [AdminUserController::class, 'bookings'])->name('bookings');
-});
-Route::group(['as' => 'tours.', 'prefix' => 'tours'], function () {
-    Route::get('/', [AdminTourController::class, 'index'])->name('index');
-    Route::get('/edit/{id}', [AdminTourController::class, 'editPage'])->name('editPage');
-    Route::post('/editTour/{id}', [AdminTourController::class, 'edit'])->name('edit');
-});
+Route::resources([
+    'places' => PlaceController::class,
+    'users' => UserController::class,
+    ]);
 
-// Route::group(['as' => '', 'prefix' => ''], function () {
-//     Route::get('/places', [AdminPlaceController::class, 'index'])->name('places.index');
-//     Route::post('/places', [AdminPlaceController::class, 'store'])->name('places.store');
-//     Route::get('/places/{place}/edit', [AdminPlaceController::class, 'edit'])->name('places.edit');
-//     Route::delete('/places/{place}', [AdminPlaceController::class, 'destroy'])->name('places.destroy');
-//     Route::put('/places/{place}', [AdminPlaceController::class, 'update'])->name('places.update');
-// Route::get("/images", [AdminPlaceController::class, 'index'])->name('images.index');
-// Route::post("/images", [AdminPlaceController::class, 'store'])->name('image.store');
-// Route::delete('/images/{image}', [AdminPlaceController::class, 'destroy'])->name('images.destroy');
-// });
-
-
-//Route::resources([
-//    'places' => PlaceController::class,
-//    'place-images' => PlaceImageController::class
-//]);
-Route::resource('places', PlaceController::class)->except(['show']);
 Route::group(['as' => 'places.', 'prefix' => 'places/{id}'], function () {
     Route::resource('images', PlaceImageController::class)->except(['upload', 'edit', 'show']);
 });
-
 
 
 
@@ -91,6 +63,45 @@ Route::group(['as' => 'blogs.', 'prefix' => 'blogs'], function () {
     });
 });
 
+Route::group(['as' => 'tours.', 'prefix' => 'tours'], function () {
+    Route::get('/', [AdminTourController::class, 'index'])->name('index');
+    Route::get('/edit/{id}', [AdminTourController::class, 'editPage'])->name('editPage');
+    Route::post('/editTour/{id}', [AdminTourController::class, 'edit'])->name('edit');
+});
+
+Route::group(['as' => 'bookings.', 'prefix' => 'bookings'], function () {
+    Route::get('/', [AdminUserController::class, 'bookings'])->name('bookings');
+});
+
+
 Route::get('/notfound', function () {
     return view('client.errors.404');
 })->name('notfound');
+
+
+
+//old routes
+
+// Route::group(['as' => '', 'prefix' => ''], function () {
+//     Route::get('/places', [AdminPlaceController::class, 'index'])->name('places.index');
+//     Route::post('/places', [AdminPlaceController::class, 'store'])->name('places.store');
+//     Route::get('/places/{place}/edit', [AdminPlaceController::class, 'edit'])->name('places.edit');
+//     Route::delete('/places/{place}', [AdminPlaceController::class, 'destroy'])->name('places.destroy');
+//     Route::put('/places/{place}', [AdminPlaceController::class, 'update'])->name('places.update');
+// Route::get("/images", [AdminPlaceController::class, 'index'])->name('images.index');
+// Route::post("/images", [AdminPlaceController::class, 'store'])->name('image.store');
+// Route::delete('/images/{image}', [AdminPlaceController::class, 'destroy'])->name('images.destroy');
+// });
+
+//Route::group(['as' => 'users.'], function () {
+//    Route::get('/users', [AdminUserController::class, 'index'])->name('index');
+//    Route::get('/users/{id}', [AdminUserController::class, 'guideInfo'])->name('show');
+//    Route::get('/users/{id}/edit', [AdminUserController::class, 'edit'])->name('edit');
+//    Route::put('/users/{id}', [AdminUserController::class, 'update'])->name('update');
+//    Route::delete('/users/{id}', [AdminUserController::class, 'block'])->name('destroy');
+//});
+
+//Route::resources([
+//    'places' => PlaceController::class,
+//    'place-images' => PlaceImageController::class
+//]);
