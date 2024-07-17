@@ -32,8 +32,9 @@
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <div class="formContainer formContainer-2">
-                        <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.properties.upload',['id'=>$item->id])}}">
-                            @csrf
+                        <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.properties.update', $item->id)}}">
+                            {{ csrf_field() }}
+                            {{ method_field('PUT') }}
                             <div class="form-group">
                                 <label for="name">Property Name</label>
                                 <input name="name" value="{{$item->name}}" type="text" class="form-control" id="productName" placeholder="Enter product name">
@@ -79,56 +80,16 @@
                             </div>
                             <div class="inputChechContainer">
                                 <div >
-                                    <div class="form-check">
-                                        <input class="form-check-input" @if($extra->wifi=="true") checked @endif type="checkbox" value="true" name="wifi">
-                                        <label class="form-check-label" for="wifi">WiFi</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->tv=="true") checked @endif type="checkbox" value="true" name="tv">
-                                        <label class="form-check-label" for="tv">TV</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->free_parking=="true") checked @endif type="checkbox" value="true" name="free_parking">
-                                        <label class="form-check-label" for="free_parking">Free Parking</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->air_conditioner=="true") checked @endif type="checkbox" value="true" name="air_conditioner">
-                                        <label class="form-check-label" for="air_conditioner">Air Conditioner</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->pool=="true") checked @endif type="checkbox" value="true" name="pool">
-                                        <label class="form-check-label" for="pool">Pool</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->gym=="true") checked @endif type="checkbox" value="true" name="gym">
-                                        <label class="form-check-label" for="gym">Gym</label>
-                                      </div>
-                                </div>
-                                  <div>
-                                    <div class="form-check">
-                                        <input class="form-check-input" @if($extra->kitchen=="true") checked @endif type="checkbox" value="true" name="kitchen">
-                                        <label class="form-check-label" for="kitchen">Kitchen</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->long_term_stay=="true") checked @endif type="checkbox" value="true" name="long_term">
-                                        <label class="form-check-label" for="long_term">Long Term Stay</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->elevator=="true") checked @endif type="checkbox" value="true" name="elevator">
-                                        <label class="form-check-label" for="elevator">Elevator</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->refrigerator=="true") checked @endif type="checkbox" value="true" name="refrigerator">
-                                        <label class="form-check-label" for="refrigerator">Refrigerator</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->pet_allowed=="true") checked @endif type="checkbox" value="true" name="pet_allowed">
-                                        <label class="form-check-label" for="pet_allowed">Pet Allowed</label>
-                                      </div>
-                                      <div class="form-check">
-                                        <input class="form-check-input" @if($extra->washing_machine=="true") checked @endif type="checkbox" value="true" name="washing_machine">
-                                        <label class="form-check-label" for="washing_machine">Washing Machine</label>
-                                      </div>
+                                    @php
+                                    $supplyIds = $item->supplies->pluck('supply_id')->toArray();
+                                    @endphp
+
+                                    @foreach($supplies as $supply)
+                                        <div class="form-check">
+                                            <input class="form-check-input" @if(in_array($supply->id, $supplyIds)) checked @endif id="{{ $supply->id }}" type="checkbox" value="{{ $supply->id }}" name="supplies[]">
+                                            <label class="form-check-label" for="{{ $supply->id }}">{{ $supply->name }}</label>
+                                        </div>
+                                    @endforeach
                                   </div>
                                 </div>
                             <button type="submit" class="btn btn-primary">Edit Place</button>

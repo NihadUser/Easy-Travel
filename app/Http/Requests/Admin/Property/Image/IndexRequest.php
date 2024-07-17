@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Requests\Admin\Place\Images;
+namespace App\Http\Requests\Admin\Property\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreRequest extends FormRequest
+class IndexRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize():bool
+    public function authorize()
     {
         return true;
     }
@@ -21,12 +21,10 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'id' => 'required|integer|exists:places,id',
-            'file' => 'required|array',
-            'file.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10000'
+            'property_id' => 'required|integer|exists:properties,id'
         ];
     }
 }

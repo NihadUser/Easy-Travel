@@ -2,7 +2,7 @@
     <div class="mainModal">
         <span class="modalCloser">X</span>
         <div class="formContainer">
-            <form class="mt-5" multiple enctype="multipart/form-data" method="POST" action="{{route('admin.places-images.store',['id'=>$place_id])}}">
+            <form class="mt-5" multiple enctype="multipart/form-data" method="POST" action="{{ route('admin.places-images.store') . "?id=$place_id"}}">
                 @csrf
                 <div class="form-group">
                     <label for="file[]">Product Image</label>

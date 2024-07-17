@@ -4,7 +4,7 @@
         <div class="detailsSwiperContainer">
             <div style="--swiper-navigation-color: #fff; --swiper-pagination-color: #fff" class="swiper mySwiper2">
                 <div class="swiper-wrapper">
-                    
+
                     @foreach ($images as $item)
                     <div class="swiper-slide">
                         <img src="{{asset("/images/imgs/$item->image")}}" />
@@ -29,35 +29,35 @@
         <div class="placeDeatilsContainer">
             <div class="placeDetailsContent">
                 <div class="placeContentRow-1">
-                    <h1>{{$element->name}}</h1>
+                    <h1>{{ $element->name }}</h1>
                     <div class="propertiesDetailsContainer">
                         <div class="propertiesDetailsContentContainer">
                             <p class="mainLocation">
-                                <img src="{{asset("/images/recoloc.svg")}}" alt=""> {{$element->location}}
+                                <img src="{{asset("/images/recoloc.svg")}}" alt=""> {{ $element->location }}
                             </p>
                             <div class="threeDivsProperty">
                                 <div>
                                     <img src="{{asset('/images/bed.svg')}}" alt="">
                                     <span>
-                                        {{$element->bed_count}} bed
+                                        {{ $element->bed_count }} bed
                                     </span>
                                 </div>
                                 <div>
                                     <img src="{{asset('/images/bath.svg')}}" alt="">
                                     <span>
-                                        {{$element->bath_count}} bath
+                                        {{ $element->bath_count }} bath
                                     </span>
                                 </div>
                                 <div>
-                                    <img src="{{asset('/images/sqft.svg')}}" alt="">
+                                    <img src="{{ asset('/images/sqft.svg') }}" alt="">
                                     <span>
-                                        {{$element->sqft_count}} sqft
+                                        {{ $element->sqft_count }} sqft
                                     </span>
                                 </div>
                             </div>
                             <div>
                                 <span>
-                                    <span class="propertyDetailsPrice">{{$element->price}}$</span>/night
+                                    <span class="propertyDetailsPrice">{{ $element->price }}$</span>/night
                                 </span>
                             </div>
                         </div>
@@ -65,9 +65,13 @@
                             <h2>More Facilities</h2>
                             <div class="propertiesDetails">
                                 <ul>
-                                    @foreach ($extras as $key => $value)
-                                        <li><img src="{{ $value == 'true' ? asset('/images/approve.svg') : asset('/images/x.svg') }}" alt="">
-                                            {{ $key }}</li>
+                                    @php
+                                    $supplyIds = $element->supplies->pluck('supply_id')->toArray();
+                                    $comments = $element->comments;
+                                    @endphp
+                                    @foreach ($supplies as $supply)
+                                        <li><img src="{{ in_array($supply->id, $supplyIds) ? asset('/images/approve.svg') : asset('/images/x.svg') }}" alt="">
+                                            {{ $supply->name }}</li>
                                     @endforeach
 
                                 </ul>
@@ -80,7 +84,7 @@
                         Description
                     </h2>
                     <p class="PlaceDetailsText">
-                       {{$element->description}}
+                       {{ $element->description }}
                     </p>
                 </div>
                 <div class="placeContentRow-1">
@@ -101,7 +105,7 @@
                             <div class="commentDiv">
                                 <div class="userComment">
                                     <div class="userCommentImage">
-                                        <img src="{{asset("/images/userImgs/$image")}}" alt="">
+                                        <img src="{{asset("/images/userImgs/". $image)}}" alt="">
                                     </div>
                                     <form  action="{{route('home.comments.propertyComment',['id'=>$element->id])}}" method="POST">
                                         @csrf
@@ -113,7 +117,7 @@
                             @endguest
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
             <div class="placeDetailsRigtSide">
@@ -124,14 +128,17 @@
                     <button class="closedTripPlaceDetails">Booked</button>
                     @endif
                     <a href="" class="savePlaceDetails">Save</a>
-                    
+
                 </div>
                 <div class="RecomendedPLacesContainer">
                     <h2>Recommended Properties</h2>
                     <div class="recommenedPlaces">
                         @foreach ($recoProperty as $item)
+                            @php
+                            $image = $item->image->image;
+                            @endphp
                         <div class="recommenedPlacesRow">
-                                <img class="placeRecommendedImage" src="{{asset("images/imgs/$item->image")}}" alt="">
+                                <img class="placeRecommendedImage" src="{{asset("images/imgs/$image")}}" alt="">
                             <div>
                                 <a style="color: black" href="{{route("home.property",['id'=>$item->id])}}">
                                     <h3>{{$item->name}}</h3>
@@ -145,7 +152,7 @@
                             </div>
                         </div>
                         @endforeach
-                        
+
 
                     </div>
                 </div>

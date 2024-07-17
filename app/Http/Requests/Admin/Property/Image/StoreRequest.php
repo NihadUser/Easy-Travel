@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Admin\Place\Images;
+namespace App\Http\Requests\Admin\Property\Image;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ class StoreRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize():bool
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,12 +21,12 @@ class StoreRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            'id' => 'required|integer|exists:places,id',
+            'property_id' => 'required|integer|exists:properties,id',
             'file' => 'required|array',
-            'file.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10000'
+            'file.*' => 'required',
         ];
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\{Request, User, TourPlan};
+use App\Models\{Request, TourPlan, User};
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\{Factory, View};
 
@@ -12,7 +12,7 @@ class AdminController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function __invoke(): Factory|View|Application
+    public function create(): Factory|View|Application
     {
         $users_count = User::query()->count();
         $requests_count = Request::query()->count();

@@ -35,10 +35,11 @@ class HomeController extends Controller
             ->where('pf.show_home', 1)
             ->skip(0)->take(4)
             ->get();
-        
-        $properties = Property::with('comments')
-            ->with('selections')
-            ->skip(0)->take(4)->get();
+
+        $properties = Property::query()
+            ->with(['comments', 'selections', 'image'])
+            ->skip(0)->take(4)
+            ->get();
 
         $tours = TourPlan::where('is_active', 1)->get();
 

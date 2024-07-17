@@ -7,6 +7,8 @@ use App\Models\BookProperty;
 use App\Models\Comment;
 use App\Models\Place;
 use App\Models\PlaceFiles;
+use App\Models\PropertySupply;
+use App\Models\Supply;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Models\Property;
@@ -58,26 +60,29 @@ class DetailsController extends Controller
         }
 
     }
+
     public function property($id)
     {
-        $element = Property::findOrFail($id);
-        $extra = $element->extras;
-        $extras = json_decode($extra, true);
+        $element = Property::query()
+            ->with(['comments', 'supplies'])
+            ->findOrFail($id);
+
+
+        $title = $element->name;
+
+        $supplies = Supply::all();
 
         $images = PropertyFile::query()
             ->where('property_id', $id)
             ->get();
 
-        $comments = Comment::with('users')
-            ->where('entity_id', $id)
-            ->where('entity_type', 'property')->
-            get();
 
-        $recoProperty = Property::inRandomOrder()
+        $recoProperty = Property::query()
+            ->inRandomOrder()
+            ->with('image')
             ->limit(4)
             ->get();
 
-        $title = $element->name;
 
         $recGuide = User::query()
             ->with('guides')
@@ -94,15 +99,31 @@ class DetailsController extends Controller
                 ->where('hotel_id', $id)
                 ->get();
 
-            // return $bookedProperty;
-            $image = User::findOrFail(auth()->id())->image;
+            $image = User::query()->findOrFail(auth()->id())->image;
 
-            return view('client.details.property.index', compact(['element', 'title', 'recoProperty', 'image', 'bookedProperty', 'extras', 'recGuide', 'comments', 'images']));
+            return view('client.details.property.index', compact([
+                'element',
+                'title',
+                'recoProperty',
+                'image',
+                'bookedProperty',
+                'recGuide',
+                'images',
+                'supplies',
+            ]));
         }
 
         $bookedProperty = null;
 
-        return view('client.details.property.index', compact(['element', 'title', 'recoProperty', 'extras', 'recGuide', 'comments', 'images', 'bookedProperty']));
+        return view('client.details.property.index', compact([
+            'element',
+            'title',
+            'recoProperty',
+            'recGuide',
+            'images',
+            'bookedProperty',
+            'supplies',
+        ]));
 
     }
     public function guide($id)

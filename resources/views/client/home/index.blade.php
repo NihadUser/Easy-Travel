@@ -162,8 +162,11 @@
         </h1>
         <div class="propertiesContainer">
             @foreach ($properties as $item)
+                @php
+                    $image = $item->image->image;
+                @endphp
             <div class="properties">
-               <a href="{{route("home.property",['id'=>$item->id])}}"> <img class="hotelMainImg" src="{{asset("/images/imgs/$item->image")}}" alt=""></a>
+               <a href="{{route("home.property",['id'=>$item->id])}}"> <img class="hotelMainImg" src="{{asset("/images/imgs/$image")}}" alt=""></a>
                 <div class="propertiesContent">
                     <div class="placeRow">
                         <h2>

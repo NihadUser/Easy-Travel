@@ -3,284 +3,165 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Property;
-use App\Models\PropertyFile;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use App\Http\Requests\Admin\Property\{StoreRequest, UpdateRequest};
+use App\Models\{Property, PropertyFile, PropertySupply, Supply};
+use Illuminate\Http\{Request, RedirectResponse};
+use Illuminate\Contracts\Foundation\{Application};
+use Illuminate\Contracts\View\{Factory, View};
+use App\Traits\{MediaTrait};
+
 
 class PropertyController extends Controller
 {
-    public function property()
+    use MediaTrait;
+    /**
+     * @return Application|Factory|View
+     */
+    public function index(): Application|Factory|View
     {
-        $place = Property::paginate(3);
-        $select3 = 'selected';
-        return view('admin.property.index', compact(['place', 'select3']));
-    }
-    public function propetyInsert(Request $request)
-    {
-        $request->validate([
-            'name' => ['required'],
-            'description' => ['required'],
-            'stars' => ['required'],
-            'location' => ['required'],
-            'price' => ['required'],
-            'bed_count' => ['required'],
-            'bath_count' => ['required'],
-            'sqft_count' => ['required'],
-            'image' => ['required'],
-        ]);
-        if ($request->wifi) {
-            $wifi = 'true';
-        } else {
-            $wifi = 'false';
-        }
-        if ($request->tv) {
-            $tv = 'true';
-        } else {
-            $tv = 'false';
-        }
-        if ($request->free_parking) {
-            $free_parking = 'true';
-        } else {
-            $free_parking = 'false';
-        }
-        if ($request->air_conditioner) {
-            $air_conditioner = 'true';
-        } else {
-            $air_conditioner = 'false';
-        }
-        if ($request->pool) {
-            $pool = 'true';
-        } else {
-            $pool = 'false';
-        }
-        if ($request->gym) {
-            $gym = 'true';
-        } else {
-            $gym = 'false';
-        }
-        if ($request->kitchen) {
-            $kitchen = 'true';
-        } else {
-            $kitchen = 'false';
-        }
-        if ($request->long_term) {
-            $long_term = 'true';
-        } else {
-            $long_term = 'false';
-        }
-        if ($request->elevator) {
-            $elevator = 'true';
-        } else {
-            $elevator = 'false';
-        }
-        if ($request->refrigerator) {
-            $refrigerator = 'true';
-        } else {
-            $refrigerator = 'false';
-        }
-        if ($request->pet_allowed) {
-            $pet_allowed = 'true';
-        } else {
-            $pet_allowed = 'false';
-        }
-        if ($request->washing_machine) {
-            $washing_machine = 'true';
-        } else {
-            $washing_machine = 'false';
-        }
-        $extra = [
-            'wifi' => $wifi,
-            'tv' => $tv,
-            'free_parking' => $free_parking,
-            'air_conditioner' => $air_conditioner,
-            'pool' => $pool,
-            'gym' => $gym,
-            'kitchen' => $kitchen,
-            'long_term_stay' => $long_term,
-            'elevator' => $elevator,
-            'refrigerator' => $refrigerator,
-            'pet_allowed' => $pet_allowed,
-            'washing_machine' => $washing_machine
-        ];
-        $extraJson = json_encode($extra);
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $newFile = time() . "." . $extension;
-        }
-        $insert = Property::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'location' => $request->location,
-            'stars' => $request->stars,
-            'price' => $request->price,
-            'bed_count' => $request->bed_count,
-            'bath_count' => $request->bath_count,
-            'sqft_count' => $request->sqft_count,
-            'image' => $newFile,
-            'extras' => $extraJson
-        ]);
-        $file->move(public_path('/images/imgs'), $newFile);
-        if ($insert) {
-            return back()->with('success', "Data Uploaded Successfully");
-        }
-    }
-    public function propetyDelete($id)
-    {
-        $delete = Property::findOrFail($id);
-        $delete->delete();
-        return back()->with('success', 'Deleted Successfully');
-    }
-    public function edit($id)
-    {
-        $item = Property::findOrFail($id);
-        $extras = $item->extras;
-        $extra = json_decode($extras);
-        return view('admin.property.edit', compact('item', 'extra'));
-    }
-    public function upload(Request $request, $id)
-    {
-        $item = Property::findOrFail($id);
-        $img = $item->image;
-        if ($request->wifi) {
-            $wifi = 'true';
-        } else {
-            $wifi = 'false';
-        }
-        if ($request->tv) {
-            $tv = 'true';
-        } else {
-            $tv = 'false';
-        }
-        if ($request->free_parking) {
-            $free_parking = 'true';
-        } else {
-            $free_parking = 'false';
-        }
-        if ($request->air_conditioner) {
-            $air_conditioner = 'true';
-        } else {
-            $air_conditioner = 'false';
-        }
-        if ($request->pool) {
-            $pool = 'true';
-        } else {
-            $pool = 'false';
-        }
-        if ($request->gym) {
-            $gym = 'true';
-        } else {
-            $gym = 'false';
-        }
-        if ($request->kitchen) {
-            $kitchen = 'true';
-        } else {
-            $kitchen = 'false';
-        }
-        if ($request->long_term) {
-            $long_term = 'true';
-        } else {
-            $long_term = 'false';
-        }
-        if ($request->elevator) {
-            $elevator = 'true';
-        } else {
-            $elevator = 'false';
-        }
-        if ($request->refrigerator) {
-            $refrigerator = 'true';
-        } else {
-            $refrigerator = 'false';
-        }
-        if ($request->pet_allowed) {
-            $pet_allowed = 'true';
-        } else {
-            $pet_allowed = 'false';
-        }
-        if ($request->washing_machine) {
-            $washing_machine = 'true';
-        } else {
-            $washing_machine = 'false';
-        }
-        $extra = [
-            'wifi' => $wifi,
-            'tv' => $tv,
-            'free_parking' => $free_parking,
-            'air_conditioner' => $air_conditioner,
-            'pool' => $pool,
-            'gym' => $gym,
-            'kitchen' => $kitchen,
-            'long_term_stay' => $long_term,
-            'elevator' => $elevator,
-            'refrigerator' => $refrigerator,
-            'pet_allowed' => $pet_allowed,
-            'washing_machine' => $washing_machine
-        ];
-        $extras = json_encode($extra);
+        $place = Property::query()
+            ->with('image')
+            ->paginate(6);
 
+        $supplies = Supply::query()->get();
+
+        return view('admin.property.index', compact(['place', 'supplies']));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * @param StoreRequest $request
+     * @return RedirectResponse
+     */
+    public function store(StoreRequest $request): RedirectResponse
+    {
+        $newFile = $this->uploadImage($request->file('image'), 'imgs');
+
+        $property = Property::create(
+            $request->validated()
+        );
+
+        PropertyFile::query()
+            ->create([
+                'image' => $newFile,
+                'show_home' => 1,
+                'property_id' => $property->id
+            ]);
+
+        $supplArr = [];
+        foreach ($request->supplies as $item)
+        {
+            $supplArr[] = [
+                'property_id' => $property->id,
+                'supply_id' => $item,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
+
+        PropertySupply::query()->insert($supplArr);
+
+        return back()->with('success', "Data Uploaded Successfully");
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * @param $id
+     * @return Application|Factory|View
+     */
+    public function edit($id): Application|Factory|View
+    {
+        $item = Property::query()->with('supplies')
+            ->from('properties as p')
+            ->select("p.*", "pf.image as image", "pf.id as imageId")
+            ->join('property_files as pf', 'pf.property_id', '=', 'p.id')
+            ->where('pf.show_home', 1)
+            ->where('p.id', $id)
+            ->first();
+
+        $supplies  = Supply::query()->get();
+
+        return view('admin.property.edit', compact('item', 'supplies'));
+    }
+
+    /**
+     * @param UpdateRequest $request
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function update(UpdateRequest $request, $id): RedirectResponse
+    {
+        $property = Property::query()->findOrFail($id);
+
+        $image = PropertyFile::query()
+            ->where('property_id', $id)
+            ->where('show_home', 1)
+            ->first()->image;
 
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $newFile = time() . "." . $extension;
-            $file->move(public_path('/images/imgs'), $newFile);
-        } else {
-            $newFile = $img;
+            $image = $this->uploadImage($request->file('image'), 'imgs');
         }
 
+        $property->update($request->validated());
 
-        $editedArr = [
-            'name' => $request->name,
-            'description' => $request->description,
-            'location' => $request->location,
-            'stars' => $request->stars,
-            'price' => $request->price,
-            'bed_count' => $request->bed_count,
-            'bath_count' => $request->bath_count,
-            'sqft_count' => $request->sqft_count,
-            'image' => $newFile,
-            'extras' => $extras
-        ];
-        $item->update($editedArr);
+        PropertyFile::query()
+            ->where('property_id', $id)
+            ->where('show_home', 1)
+            ->update([
+                'image' => $image,
+            ]);
+
+        PropertySupply::query()
+            ->where('property_id', $id)
+            ->delete();
+
+        $supplyArr = [];
+        foreach ($request->supplies as $item)
+        {
+            $supplyArr[] = [
+                'supply_id' => $item,
+                'property_id' => $id,
+                'created_at' => now(),
+                'updated_at' => now()
+            ];
+        }
+        PropertySupply::query()->insert($supplyArr);
+
         return back()->with('success', 'Updated successfully');
     }
-    public function image($id)
+
+    /**
+     * @param $id
+     * @return RedirectResponse
+     */
+    public function destroy($id): RedirectResponse
     {
-        $files = PropertyFile::where('property_id', $id)->get();
-        $name = Property::findOrFail($id)->name;
-        return view('admin.property.image', compact(['files', 'id', 'name']));
-    }
-    public function insert(Request $request, $id)
-    {
-        $validation = $request->validate([
-            'file' => ['required', 'array'],
-            'file.*' => ['required'],
-        ]);
-        if ($validation) {
-            foreach ($request->file('file') as $file) {
-                $extension = $file->getClientOriginalExtension();
-                $newFile = Str::uuid() . "." . $extension;
-                $file->move(public_path('/images/imgs'), $newFile);
-                $create = PropertyFile::create([
-                    'image' => $newFile,
-                    'property_id' => $id
-                ]);
-            }
-            if ($create) {
-                return back()->with('success', "Images added successsfully");
-            }
-        } else {
-            return back()->with('error', "Please fill all inputs");
+        $delete = Property::query()->findOrFail($id);
+
+        if(!$delete){
+            return back()->with('error', "Data Not Found");
         }
-    }
-    public function deleteImage($id)
-    {
-        $item = PropertyFile::findOrFail($id);
-        $delete = $item->delete();
-        if ($delete) {
-            return back()->with('success', "Image deleted successfully");
-        }
+
+        $delete->delete();
+        return back()->with('success', 'Deleted Successfully');
     }
 }

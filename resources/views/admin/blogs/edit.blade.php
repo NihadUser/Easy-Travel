@@ -32,8 +32,9 @@
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <div class="formContainer formContainer-2">
-                        <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.blogs.blogEdit',['id'=>$blog->id])}}">
-                            @csrf
+                        <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{ route('admin.blogs.update', $blog->id) }}">
+                            {{ csrf_field() }}
+                            {{ method_field('PUT') }}
                             <div class="form-group">
                                 <label for="name">Blog Name</label>
                                 <input name="name" value="{{$blog->name}}" type="text" class="form-control" id="productName" placeholder="Enter product name">
@@ -45,7 +46,7 @@
                             <div class="form-group">
                                 <label for="image">Blog Image</label>
                                 <input class="form-control" type="file" name="image"  id="formFile">
-                                <img src="{{asset("/images/blogImgs/$blog->image")}}" class="etitableImage" alt="">
+                                <img src="{{ asset("/images/blogImgs/$blog->image") }}" class="etitableImage" alt="">
                             </div>
                             <div class="form-group">
                                 <label for="description">Description</label>

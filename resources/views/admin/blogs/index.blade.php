@@ -2,7 +2,7 @@
     <div class="mainModal">
         <span class="modalCloser">X</span>
         <div class="formContainer">
-            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.blogs.blogAdd')}}">
+            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.blogs.store')}}">
                 @csrf
                 <div class="form-group">
                     <label for="name">Enter Blog Name</label>
@@ -31,7 +31,7 @@
                 <button type="submit" class="btn btn-primary">Add Blog</button>
             </form>
         </div>
-    </div>                       
+    </div>
 </div>
 @include('admin.adminParts.header')
 <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
@@ -66,14 +66,14 @@
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <a class="newItemAdder">Add New</a>
-                    
+
                     <table class="table table-hover ">
                         <thead>
                             <tr>
                                 <th scope="col">Id</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Short Description</th>
-                                <th scope="col">Description</th>
+{{--                                <th scope="col">Description</th>--}}
                                 <th scope="col">Author</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Actions</th>
@@ -85,13 +85,17 @@
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->short_description}}</td>
-                                <td>{{$item->description}}</td>
+{{--                                <td>{{$item->description}}</td>--}}
                                 <td>{{$item->author->name}}</td>
                                 <td><img class="dataImage" src="{{asset("/images/blogImgs/$item->image")}}" alt=""></td>
                                 <td>
-                                 <a class="deleteItem" href="{{route('admin.places.deletePlace',['id'=>$item->id])}}">Delete</a>
-                                 <a class="editItem" href="{{route('admin.blogs.editBlog',['id'=>$item->id])}}">Edit</a>
-                                 <a href="{{route("admin.blogs.comments.comments",['id'=>$item->id])}}" class="allImages">Comments</a>
+                                    <form action="{{ route('admin.blogs.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="border: none;border-radius: 5px;" class="deleteItem">Delete</button>
+                                    </form>
+                                 <a class="editItem" href="{{route('admin.blogs.edit', $item->id)}}">Edit</a>
+                                 <a href="{{route("admin.blogs.comments.comments", $item->id)}}" class="allImages">Comments</a>
                              </td>
                               </tr>
                            @endforeach
@@ -104,8 +108,8 @@
                             @else
                                 <li><a href="{{ $blogs->previousPageUrl() }}" rel="prev">&laquo;</a></li>
                             @endif
-                    
-                            
+
+
                             @for ($i = 1; $i <= $blogs->lastPage(); $i++)
                             @if ($i == $blogs->currentPage())
                                 <li class="active"><span>{{ $i }}</span></li>
@@ -113,7 +117,7 @@
                                 <li><a href="{{ $blogs->url($i) }}">{{ $i }}</a></li>
                             @endif
                         @endfor
-                    
+
                             @if ($blogs->hasMorePages())
                                 <li><a href="{{ $blogs->nextPageUrl() }}" rel="next">&raquo;</a></li>
                             @else

@@ -2,7 +2,7 @@
     <div class="mainModal">
         <span class="modalCloser">X</span>
         <div class="formContainer">
-            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.properties.insert')}}">
+            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.properties.store')}}">
                 @csrf
                 <div class="form-group">
                     <label for="name">Property Name</label>
@@ -45,56 +45,12 @@
                 </div>
                 <div class="inputChechContainer">
                     <div >
+                        @foreach($supplies as $item )
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="wifi">
-                            <label class="form-check-label" for="wifi">WiFi</label>
+                            <input class="form-check-input" type="checkbox" id="{{ $item->id }}" value="{{ $item->id }}" name="supplies[]">
+                            <label class="form-check-label" for="{{ $item->id }}">{{ $item->name }}</label>
                           </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="tv">
-                            <label class="form-check-label" for="tv">TV</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="free_parking">
-                            <label class="form-check-label" for="free_parking">Free Parking</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="air_conditioner">
-                            <label class="form-check-label" for="air_conditioner">Air Conditioner</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="pool">
-                            <label class="form-check-label" for="pool">Pool</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="gym">
-                            <label class="form-check-label" for="gym">Gym</label>
-                          </div>
-                    </div>
-                      <div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="kitchen">
-                            <label class="form-check-label" for="kitchen">Kitchen</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="long_term">
-                            <label class="form-check-label" for="long_term">Long Term Stay</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="elevator">
-                            <label class="form-check-label" for="elevator">Elevator</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="refrigerator">
-                            <label class="form-check-label" for="refrigerator">Refrigerator</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="pet_allowed">
-                            <label class="form-check-label" for="pet_allowed">Pet Allowed</label>
-                          </div>
-                          <div class="form-check">
-                            <input class="form-check-input" type="checkbox" value="true" name="washing_machine">
-                            <label class="form-check-label" for="washing_machine">Washing Machine</label>
-                          </div>
+                        @endforeach
                       </div>
                     </div>
                       <div class="form-group">
@@ -104,7 +60,7 @@
                 <button type="submit" class="btn btn-primary">Add Property</button>
             </form>
         </div>
-    </div>                       
+    </div>
 </div>
 @include('admin.adminParts.header')
 <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
@@ -139,7 +95,7 @@
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <a class="newItemAdder">Add New</a>
-                    
+
                     <table class="table table-hover ">
                         <thead>
                             <tr>
@@ -155,8 +111,12 @@
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
+
                         <tbody>
                            @foreach ($place as $item)
+                               @php
+                                   $image = $item->image->image;
+                               @endphp
                            <tr>
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{$item->name}}</td>
@@ -166,15 +126,19 @@
                                 <td>{{$item->bath_count}}</td>
                                 <td>{{$item->sqft_count}}</td>
                                 <td>{{$item->bed_count}}</td>
-                                <td><img class="dataImage" src="{{asset("/images/imgs/$item->image")}}" alt=""></td>
+                                <td><img class="dataImage" src="{{asset("/images/imgs/$image")}}" alt=""></td>
                                 <td>
-                                    <a class="deleteItem" href="{{route('admin.properties.delete',['id'=>$item->id])}}">Delete</a>
-                                    <a class="editItem" href="{{route("admin.properties.edit",['id'=>$item->id])}}">Edit</a>
-                                    <a href="{{route('admin.properties.images.image',['id'=>$item->id])}}" class="allImages">View all images</a>
+                                    <form action="{{ route('admin.properties.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="border: none;border-radius: 5px;"  class="deleteItem">Delete</button>
+                                    </form>
+                                    <a class="editItem" href="{{route("admin.properties.edit", $item->id )}}">Edit</a>
+                                    <a href="{{route('admin.properties-images.index') . "?property_id=$item->id"}}" class="allImages">View all images</a>
                                 </td>
                             </tr>
                            @endforeach
-                           
+
                         </tbody>
                     </table>
                     <div class="pagination-container">
@@ -184,8 +148,8 @@
                             @else
                                 <li><a href="{{ $place->previousPageUrl() }}" rel="prev">&laquo;</a></li>
                             @endif
-                    
-                            
+
+
                             @for ($i = 1; $i <= $place->lastPage(); $i++)
                             @if ($i == $place->currentPage())
                                 <li class="active"><span>{{ $i }}</span></li>
@@ -193,7 +157,7 @@
                                 <li><a href="{{ $place->url($i) }}">{{ $i }}</a></li>
                             @endif
                         @endfor
-                    
+
                             @if ($place->hasMorePages())
                                 <li><a href="{{ $place->nextPageUrl() }}" rel="next">&raquo;</a></li>
                             @else

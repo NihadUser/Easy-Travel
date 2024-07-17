@@ -5,11 +5,17 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
 use App\Models\BlogCategory;
-use App\Models\Comment;
 use Illuminate\Http\Request;
+use App\Traits\MediaTrait;
 
-class AdminBlogController extends Controller
+class BlogController extends Controller
 {
+    use MediaTrait;
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
         $category = BlogCategory::all();
@@ -19,21 +25,27 @@ class AdminBlogController extends Controller
 
         return view('admin.blogs.index', compact(['category', 'blogs']));
     }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required'],
-            'short_description' => ['required'],
-            'description' => ['required'],
-            'category' => ['required'],
-            'image' => ['required'],
-        ]);
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $newFile = time() . "." . $extension;
-            $file->move(public_path('/images/blogImgs'), $newFile);
-        }
+        $newFile = $this->uploadImage($request->file('image'), 'blogImgs');
+
         $insert = Blog::create([
             'name' => $request->name,
             'short_description' => $request->short_description,
@@ -46,35 +58,42 @@ class AdminBlogController extends Controller
             return back()->with('success', 'Blog added successfully!');
         }
     }
-    public function category()
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
     {
-        $category = BlogCategory::all();
-        return view('admin.blogs.category.index', compact(['category']));
+        //
     }
-    public function categoryAdd(Request $request)
-    {
-        $request->validate([
-            'name' => ['required', 'string']
-        ]);
-        $name = $request->name;
-        $insert = BlogCategory::create([
-            'name' => $name
-        ]);
-        if ($insert) {
-            return back()->with('success', "Category added Blogs successfully");
-        }
-    }
-    public function comments($id)
-    {
-        $comments = Comment::where('entity_type', 'blog')->where("entity_id", $id)->with('users')->get();
-        return view('admin.blogs.comments.index', compact(['comments']));
-    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function edit($id)
     {
-        $blog = Blog::with('author')->with('category')->where('id', $id)->first();
+        $blog = Blog::with(['author', 'category'])->where('id', $id)->first();
         $category = BlogCategory::all();
+
+        if(!$blog){
+            return back()->with('error', 'Blog not found!');
+        }
         return view('admin.blogs.edit', compact(['blog', 'category']));
     }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
         $blog = Blog::findOrFail($id);
@@ -99,6 +118,12 @@ class AdminBlogController extends Controller
         }
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
         $blog = Blog::query()->findOrFail($id);
@@ -107,11 +132,5 @@ class AdminBlogController extends Controller
         }
         $blog->delete();
         return back()->with('success', 'Blog deleted successfully!');
-    }
-    public function categoryDelete($id)
-    {
-        $category = BlogCategory::findOrFail($id);
-        $category->delete();
-        return back()->with('success', 'Category deleted successfully');
     }
 }

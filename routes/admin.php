@@ -1,16 +1,17 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\admin\{
-    AdminBlogController,
+use App\Http\Controllers\admin\{AdminBlogController,
     AdminController,
     AdminTourController,
     AdminUserController,
-    PropertyController,
+    PropertyImageController,
     RequestController,
     PlaceController,
     PlaceImageController,
     UserController,
+    PropertyController,
+    BlogController
 };
 
 /* Invokable Controllers */
@@ -21,20 +22,12 @@ Route::resources([
     'places' => PlaceController::class,
     'places-images' => PlaceImageController::class,
     'users' => UserController::class,
+    'properties' => PropertyController::class,
+    'properties-images' => PropertyImageController::class,
+    'blogs' => BlogController::class
 ]);
 
-Route::group(['as' => 'properties.', 'prefix' => 'properties'], function () {
-    Route::get('/', [PropertyController::class, 'property'])->name('property');
-    Route::post("/propetyInsert", [PropertyController::class, "propetyInsert"])->name('insert');
-    Route::get("/propetyDelete_{id}", [PropertyController::class, "propetyDelete"])->name('delete');
-    Route::get("/edit-{id}", [PropertyController::class, 'edit'])->name('edit');
-    Route::post("/upload-{id}", [PropertyController::class, 'upload'])->name('upload');
-    Route::group(['as' => 'images.', 'prefix' => 'images'], function () {
-        Route::get('/{id}', [PropertyController::class, 'image'])->name('image');
-        Route::post("/insert{id}", [PropertyController::class, 'insert'])->name("insert");
-        Route::get("/delete/{id}", [PropertyController::class, 'deleteImage'])->name('deleteImage');
-    });
-});
+
 Route::group(['as' => 'requests.', 'prefix' => "requests"], function () {
     Route::get("/", [RequestController::class, 'index'])->name('request');
     Route::get("/approve-host/{id}", [RequestController::class, 'approve'])->name('approve');
@@ -44,11 +37,8 @@ Route::group(['as' => 'requests.', 'prefix' => "requests"], function () {
     Route::get('/delete/{id}', [RequestController::class, 'delete'])->name('delete');
     Route::get('/tour-details/{id}', [RequestController::class, 'tourDetails'])->name("tourDetails");
 });
+
 Route::group(['as' => 'blogs.', 'prefix' => 'blogs'], function () {
-    Route::get('/', [AdminBlogController::class, 'index'])->name('blogs');
-    Route::post("/", [AdminBlogController::class, 'blogAdd'])->name('blogAdd');
-    Route::get("/edit/{id}", [AdminBlogController::class, 'editBlog'])->name('editBlog');
-    Route::post("/insert/{id}", [AdminBlogController::class, 'blogEdit'])->name('blogEdit');
     Route::group(['as' => 'category.', 'prefix' => 'category'], function () {
         Route::get('/', [AdminBlogController::class, 'category'])->name('category');
         Route::post('/', [AdminBlogController::class, 'categoryAdd'])->name('categoryAdd');
@@ -98,7 +88,25 @@ Route::view('/notfound', 'client.errors.404')->name('notfound');
 //    Route::delete('/users/{id}', [AdminUserController::class, 'block'])->name('destroy');
 //});
 
-//Route::resources([
-//    'places' => PlaceController::class,
-//    'place-images' => PlaceImageController::class
-//]);
+
+//    Route::get('/', [AdminPropertyController::class, 'index'])->name('index');
+//    Route::post("/store", [AdminPropertyController::class, "store"])->name('store');
+//    Route::delete("/{id}", [AdminPropertyController::class, "destroy"])->name('destroy');
+//    Route::get("/{id}/edit", [AdminPropertyController::class, 'edit'])->name('edit');
+//    Route::put("/{id}", [AdminPropertyController::class, 'upload'])->name('upload');
+//Route::get('/properties-images', [AdminPropertyController::class, 'index'])->name('index');
+//Route::post("/properties-images", [AdminPropertyController::class, 'store'])->name("store");
+//Route::delete("/destroy/{id}", [AdminPropertyController::class, 'destroy'])->name('destroy');
+//Route::get('/', [AdminBlogController::class, 'index'])->name('index');
+//Route::post("/", [AdminBlogController::class, 'store'])->name('store');
+//Route::get("/{id}/edit", [AdminBlogController::class, 'edit'])->name('edit');
+//Route::put("/{id}", [AdminBlogController::class, 'update'])->name('update');
+//Route::delete("/{id}", [AdminBlogController::class, 'destroy'])->name('destroy');
+
+//Route::group(['as' => 'places', 'prefix' => 'places'], function () {
+//    Route::get('/', [AdminPlaceController::class, 'index'])->name('places.index');
+//    Route::post('/', [AdminPlaceController::class, 'store'])->name('places.store');
+//    Route::get('/{place}/edit', [AdminPlaceController::class, 'edit'])->name('places.edit');
+//    Route::delete('/{place}', [AdminPlaceController::class, 'destroy'])->name('places.destroy');
+//    Route::put('/{place}', [AdminPlaceController::class, 'update'])->name('places.update');
+//});

@@ -35,8 +35,8 @@ class PlaceController extends Controller
      * @return void
      */
     public function show()
-    {//
-
+    {
+        //
     }
 
     /**

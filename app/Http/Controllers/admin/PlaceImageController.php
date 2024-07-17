@@ -6,11 +6,12 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Admin\Place\Images\{IndexRequest, StoreRequest};
 use App\Models\{Place, PlaceFiles};
-use Illuminate\Support\Str;
 use Illuminate\Contracts\View\{Factory, View};
+use App\Traits\MediaTrait;
 
 class PlaceImageController extends Controller
 {
+    use MediaTrait;
     /**
      * @param IndexRequest $request
      * @return Factory|View
@@ -30,18 +31,16 @@ class PlaceImageController extends Controller
      * @param $id
      * @return RedirectResponse
      */
-    public function store(StoreRequest $request, $id): RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
         $images = [];
 
         foreach ($request->file('file') as $file) {
-            $extension = $file->getClientOriginalExtension();
-            $newFileName = Str::uuid() . '.' . $extension;
-            $file->move(public_path('/images/imgs'), $newFileName);
+            $newFileName = $this->uploadImage($file, 'imgs');
 
             $images[] = [
                 'image' => $newFileName,
-                'place_id' => $id
+                'place_id' => $request->get('id')
             ];
         }
 
@@ -60,7 +59,7 @@ class PlaceImageController extends Controller
      */
     public function destroy($id): RedirectResponse
     {
-        $place_file = PlaceFiles::query()->has('place')->findOrFail($id);
+        $place_file = PlaceFiles::query()->with('place')->findOrFail($id);
 
         if ($place_file->delete()) {
             return back()->with('success', 'Image deleted successfully!');
