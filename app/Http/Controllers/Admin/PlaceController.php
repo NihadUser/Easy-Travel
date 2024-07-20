@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Place;
 use App\Models\PlaceFiles;
 use Exception;
 use Illuminate\Http\{Response, Request, RedirectResponse};
-use App\Http\Requests\Admin\Place\{StoreRequest, UpdateRequest};
 use Illuminate\Contracts\View\{Factory, View};
+use App\Http\Requests\Admin\Place\{StoreRequest, UpdateRequest};
 use App\Traits\MediaTrait;
 
 class PlaceController extends Controller

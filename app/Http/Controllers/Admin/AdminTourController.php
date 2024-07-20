@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\TourPlan;
@@ -15,7 +15,7 @@ class AdminTourController extends Controller
     }
     public function editPage(Request $request, $id)
     {
-        $tour = TourPlan::findOrFail($id);
+        $tour = TourPlan::query()->findOrFail($id);
         $places = json_decode($tour->travel_places);
         $transport = json_decode($tour->transport);
         $arr = [

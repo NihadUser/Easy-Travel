@@ -31,7 +31,7 @@
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
                     <a class="newItemAdder">Add New</a>
-                    
+
                     <table style="width:60%;" class="table table-hover ">
                         <thead>
                             <tr>
@@ -48,14 +48,17 @@
                                 <td>{{$item->users->name}}</td>
                                 <td>{{$item->body}}</td>
                                 <td>
-                                 <a class="deleteItem" href="">Delete</a>
-                                 <a class="editItem" href="">Edit</a>
+                                    <form action="{{ route('admin.blog-comments.destroy', $item->id) }}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" style="border: none;border-radius: 5px;" class="deleteItem">Delete</button>
+                                    </form>
                              </td>
                               </tr>
                            @endforeach
                         </tbody>
                     </table>
-                    
+
                 </div>
             </div>
         </div>

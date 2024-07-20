@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Property\{StoreRequest, UploadRequest};
+use App\Http\Requests\Admin\Property\{StoreRequest, };
 use App\Models\{Property, PropertyFile, PropertySupply, Supply};
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;

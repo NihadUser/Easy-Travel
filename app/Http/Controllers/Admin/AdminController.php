@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\{Request, TourPlan, User};
@@ -12,7 +12,7 @@ class AdminController extends Controller
     /**
      * @return Application|Factory|View
      */
-    public function create(): Factory|View|Application
+    public function __invoke(): Factory|View|Application
     {
         $users_count = User::query()->count();
         $requests_count = Request::query()->count();

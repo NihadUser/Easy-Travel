@@ -53,7 +53,7 @@
                             @foreach ($tours as $item)
                                <tr>
                                 <td>
-                                    {{$loop->iteration}}                                    
+                                    {{$loop->iteration}}
                                 </td>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->price}}$</td>
@@ -87,6 +87,7 @@
                                     @endif
                                 </td>
                                 <td>
+                                    <a href="" class="btn btn-success""><i class="fa fa-eye"></i></a>
                                     <a href="" class="deleteItem">Delete</a>
                                     <a href="{{route('admin.tours.editPage',['id'=>$item->id])}}" class="editItem">Edit</a>
                                 </td>
@@ -101,8 +102,8 @@
                             @else
                                 <li><a href="{{ $tours->previousPageUrl() }}" rel="prev">&laquo;</a></li>
                             @endif
-                    
-                            
+
+
                             @for ($i = 1; $i <= $tours->lastPage(); $i++)
                             @if ($i == $tours->currentPage())
                                 <li class="active"><span>{{ $i }}</span></li>
@@ -110,7 +111,7 @@
                                 <li><a href="{{ $tours->url($i) }}">{{ $i }}</a></li>
                             @endif
                         @endfor
-                    
+
                             @if ($tours->hasMorePages())
                                 <li><a href="{{ $tours->nextPageUrl() }}" rel="next">&raquo;</a></li>
                             @else

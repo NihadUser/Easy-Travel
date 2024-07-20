@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Comment, Selection, PropertyFile};
 
 class Property extends Model
 {
     use HasFactory;
-    protected $table = 'properties';
+
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'name',
         'description',
@@ -20,17 +22,20 @@ class Property extends Model
         'bed_count',
         'sqft_count',
         'price',
-        'extras'
+        'extras',
     ];
+
     public function comments()
     {
-        return $this->hasMany(Comment::class, 'entity_id', 'id')->where('entity_type', 'property');
-    }
-    public function selections()
-    {
-        return $this->hasOne(Selection::class, 'entity_id', 'id')->where('entity_type', 'property')->where('user_id', auth()->id());
+        return $this->hasMany(Comment::class, 'entity_id', 'id')
+            ->where('entity_type', 'property');
     }
 
+    public function selections()
+    {
+        return $this->hasOne(Selection::class, 'entity_id', 'id')
+            ->where('entity_type', 'property')->where('user_id', auth()->id());
+    }
 
     public function supplies()
     {
@@ -41,6 +46,7 @@ class Property extends Model
 
     public function image()
     {
-        return $this->hasOne(PropertyFile::class, 'property_id', 'id')->where('show_home', 1);
+        return $this->hasOne(PropertyFile::class, 'property_id', 'id')
+            ->where('show_home', 1);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Blog;
@@ -10,48 +10,48 @@ use Illuminate\Http\Request;
 
 class AdminBlogController extends Controller
 {
+//    public function index()
+//    {
+//        $category = BlogCategory::all();
+//        $blogs = Blog::query()
+//            ->with('author')
+//            ->paginate(5);
+//
+//        return view('admin.blogs.index', compact(['category', 'blogs']));
+//    }
+//    public function store(Request $request)
+//    {
+//        $request->validate([
+//            'name' => ['required'],
+//            'short_description' => ['required'],
+//            'description' => ['required'],
+//            'category' => ['required'],
+//            'image' => ['required'],
+//        ]);
+//        if ($request->hasFile('image')) {
+//            $file = $request->file('image');
+//            $extension = $file->getClientOriginalExtension();
+//            $newFile = time() . "." . $extension;
+//            $file->move(public_path('/images/blogImgs'), $newFile);
+//        }
+//        $insert = Blog::create([
+//            'name' => $request->name,
+//            'short_description' => $request->short_description,
+//            'description' => $request->description,
+//            'image' => $newFile,
+//            'category_id' => $request->category,
+//            'user_id' => auth()->id()
+//        ]);
+//        if ($insert) {
+//            return back()->with('success', 'Blog added successfully!');
+//        }
+//    }
     public function index()
-    {
-        $category = BlogCategory::all();
-        $blogs = Blog::query()
-            ->with('author')
-            ->paginate(5);
-
-        return view('admin.blogs.index', compact(['category', 'blogs']));
-    }
-    public function store(Request $request)
-    {
-        $request->validate([
-            'name' => ['required'],
-            'short_description' => ['required'],
-            'description' => ['required'],
-            'category' => ['required'],
-            'image' => ['required'],
-        ]);
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $newFile = time() . "." . $extension;
-            $file->move(public_path('/images/blogImgs'), $newFile);
-        }
-        $insert = Blog::create([
-            'name' => $request->name,
-            'short_description' => $request->short_description,
-            'description' => $request->description,
-            'image' => $newFile,
-            'category_id' => $request->category,
-            'user_id' => auth()->id()
-        ]);
-        if ($insert) {
-            return back()->with('success', 'Blog added successfully!');
-        }
-    }
-    public function category()
     {
         $category = BlogCategory::all();
         return view('admin.blogs.category.index', compact(['category']));
     }
-    public function categoryAdd(Request $request)
+    public function store(Request $request)
     {
         $request->validate([
             'name' => ['required', 'string']
@@ -99,16 +99,16 @@ class AdminBlogController extends Controller
         }
     }
 
+//    public function destroy($id)
+//    {
+//        $blog = Blog::query()->findOrFail($id);
+//        if(!$blog){
+//            return back()->with('error', 'Blog not found!');
+//        }
+//        $blog->delete();
+//        return back()->with('success', 'Blog deleted successfully!');
+//    }
     public function destroy($id)
-    {
-        $blog = Blog::query()->findOrFail($id);
-        if(!$blog){
-            return back()->with('error', 'Blog not found!');
-        }
-        $blog->delete();
-        return back()->with('success', 'Blog deleted successfully!');
-    }
-    public function categoryDelete($id)
     {
         $category = BlogCategory::findOrFail($id);
         $category->delete();

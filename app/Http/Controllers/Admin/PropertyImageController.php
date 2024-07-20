@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Property\Image\{IndexRequest, StoreRequest};
@@ -21,7 +21,10 @@ class PropertyImageController extends Controller
     public function index(IndexRequest $request): Application|Factory|View
     {
         $property_id = $request->get('property_id');
-        $files = PropertyFile::query()->where('property_id', $property_id)->where('show_home', 0)->get();
+        $files = PropertyFile::query()
+            ->where('property_id', $property_id)
+            ->where('show_home', 0)
+            ->get();
         $name = Property::query()->findOrFail($property_id)->name;
 
         return view('admin.property.image', compact(['files', 'property_id', 'name']));

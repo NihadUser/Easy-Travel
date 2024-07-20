@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\admin\{AdminBlogController,
+use App\Http\Controllers\Admin\{
     AdminController,
     AdminTourController,
     AdminUserController,
@@ -11,7 +11,9 @@ use App\Http\Controllers\admin\{AdminBlogController,
     PlaceImageController,
     UserController,
     PropertyController,
-    BlogController
+    BlogController,
+    CategoryController,
+    BlogCommentController
 };
 
 /* Invokable Controllers */
@@ -24,7 +26,9 @@ Route::resources([
     'users' => UserController::class,
     'properties' => PropertyController::class,
     'properties-images' => PropertyImageController::class,
-    'blogs' => BlogController::class
+    'blogs' => BlogController::class,
+    'blog-categories' => CategoryController::class,
+    'blog-comments' => BlogCommentController::class,
 ]);
 
 
@@ -38,16 +42,6 @@ Route::group(['as' => 'requests.', 'prefix' => "requests"], function () {
     Route::get('/tour-details/{id}', [RequestController::class, 'tourDetails'])->name("tourDetails");
 });
 
-Route::group(['as' => 'blogs.', 'prefix' => 'blogs'], function () {
-    Route::group(['as' => 'category.', 'prefix' => 'category'], function () {
-        Route::get('/', [AdminBlogController::class, 'category'])->name('category');
-        Route::post('/', [AdminBlogController::class, 'categoryAdd'])->name('categoryAdd');
-        Route::get('/delete/{id}', [AdminBlogController::class, 'categoryDelete'])->name('categoryDelete');
-    });
-    Route::group(['as' => 'comments.', 'prefix' => 'comments'], function () {
-        Route::get('/{id}', [AdminBlogController::class, 'comments'])->name('comments');
-    });
-});
 
 Route::group(['as' => 'tours.', 'prefix' => 'tours'], function () {
     Route::get('/', [AdminTourController::class, 'index'])->name('index');
@@ -55,17 +49,18 @@ Route::group(['as' => 'tours.', 'prefix' => 'tours'], function () {
     Route::post('/editTour/{id}', [AdminTourController::class, 'edit'])->name('edit');
 });
 
+
 Route::group(['as' => 'bookings.', 'prefix' => 'bookings'], function () {
     Route::get('/', [AdminUserController::class, 'bookings'])->name('bookings');
 });
 
 
+Route::view('/notfound', 'client.errors.404')->name('notfound');
+
+
 //Route::get('/notfound', function () {
 //    return view('client.errors.404');
 //});
-
-Route::view('/notfound', 'client.errors.404')->name('notfound');
-
 
 //old routes
 
@@ -109,4 +104,15 @@ Route::view('/notfound', 'client.errors.404')->name('notfound');
 //    Route::get('/{place}/edit', [AdminPlaceController::class, 'edit'])->name('places.edit');
 //    Route::delete('/{place}', [AdminPlaceController::class, 'destroy'])->name('places.destroy');
 //    Route::put('/{place}', [AdminPlaceController::class, 'update'])->name('places.update');
+//});
+//Route::group(['as' => 'blogs.', 'prefix' => 'blogs'], function () {
+//    Route::group(['as' => 'comments.', 'prefix' => 'comments'], function () {
+//        Route::get('/{id}', [AdminBlogController::class, 'comments'])->name('comments');
+//        //    Route::group(['as' => 'blog-categories.', 'prefix' => 'category'], function () {
+////        Route::get('/', [AdminBlogController::class, 'index'])->name('index');
+////        Route::post('/', [AdminBlogController::class, 'store'])->name('store');
+////        Route::delete('/{id}', [AdminBlogController::class, 'destroy'])->name('destroy');
+////    });
+//
+//    });
 //});

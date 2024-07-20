@@ -1,38 +1,3 @@
-<div class="modalContainer">
-    <div class="mainModal">
-        <span class="modalCloser">X</span>
-        <div class="formContainer">
-            <form method="POST" class="mt-5" enctype="multipart/form-data" action="{{route('admin.blogs.store')}}">
-                @csrf
-                <div class="form-group">
-                    <label for="name">Enter Blog Name</label>
-                    <input name="name" type="text" class="form-control" id="productName" placeholder="Enter product name">
-                </div>
-                <div class="form-group">
-                    <label for="short_description">Enter Blog Short Description</label>
-                    <textarea maxlength="256" name="short_description" class="form-control" id="productDescription" rows="3" placeholder="Enter product description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="description">Enter Blog Main Description</label>
-                    <textarea name="description" class="form-control" id="productDescription" rows="3" placeholder="Enter product description"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="category">Blog Category</label>
-                    <select name="category" class="form-control" id="productRating">
-                        @foreach ($category as $item)
-                        <option value="{{$item->id}}">{{$item->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="image">Blog Image</label>
-                    <input class="form-control" type="file" name="image"  id="formFile">
-                </div>
-                <button type="submit" class="btn btn-primary">Add Blog</button>
-            </form>
-        </div>
-    </div>
-</div>
 @include('admin.adminParts.header')
 <div class="bmd-layout-container bmd-drawer-f-l avam-container animated bmd-drawer-in">
     @include('admin.adminParts.menu')
@@ -73,7 +38,7 @@
                                 <th scope="col">Id</th>
                                 <th scope="col">Name</th>
                                 <th scope="col">Short Description</th>
-{{--                                <th scope="col">Description</th>--}}
+                                <th scope="col">Description</th>
                                 <th scope="col">Author</th>
                                 <th scope="col">Image</th>
                                 <th scope="col">Actions</th>
@@ -85,7 +50,7 @@
                                 <td>{{$item->id}}</td>
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->short_description}}</td>
-{{--                                <td>{{$item->description}}</td>--}}
+                                <td>{{$item->description}}</td>
                                 <td>{{$item->author->name}}</td>
                                 <td><img class="dataImage" src="{{asset("/images/blogImgs/$item->image")}}" alt=""></td>
                                 <td>
@@ -95,7 +60,7 @@
                                         <button type="submit" style="border: none;border-radius: 5px;" class="deleteItem">Delete</button>
                                     </form>
                                  <a class="editItem" href="{{route('admin.blogs.edit', $item->id)}}">Edit</a>
-                                 <a href="{{route("admin.blogs.comments.comments", $item->id)}}" class="allImages">Comments</a>
+                                 <a href="{{route("admin.blog-comments.index") . "?blog_id=$item->id"}}" class="allImages">Comments</a>
                              </td>
                               </tr>
                            @endforeach

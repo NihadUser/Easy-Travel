@@ -1,22 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Blog;
-use App\Models\BlogCategory;
-use Illuminate\Http\Request;
+use App\Http\Requests\Admin\Blog\{StoreRequest, UpdateRequest};
+use App\Models\{Blog, BlogCategory};
+use Illuminate\Http\{Request,RedirectResponse};
 use App\Traits\MediaTrait;
+use Illuminate\Contracts\View\{View, Factory};
+use Illuminate\Contracts\Foundation\Application;
 
 class BlogController extends Controller
 {
     use MediaTrait;
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return Application|Factory|View
      */
-    public function index()
+    public function index(): Application|Factory|View
     {
         $category = BlogCategory::all();
         $blogs = Blog::query()
@@ -37,26 +38,24 @@ class BlogController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StoreRequest $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         $newFile = $this->uploadImage($request->file('image'), 'blogImgs');
 
-        $insert = Blog::create([
+        $insert = Blog::query()->create([
             'name' => $request->name,
-            'short_description' => $request->short_description,
             'description' => $request->description,
+            'short_description' => $request->short_description,
             'image' => $newFile,
-            'category_id' => $request->category,
-            'user_id' => auth()->id()
+            'category_id' => $request->category
         ]);
         if ($insert) {
             return back()->with('success', 'Blog added successfully!');
         }
+        return back()->with('error', 'Something went wrong!');
     }
 
     /**
@@ -78,7 +77,7 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        $blog = Blog::with(['author', 'category'])->where('id', $id)->first();
+        $blog = Blog::query()->with(['author', 'category'])->where('id', $id)->first();
         $category = BlogCategory::all();
 
         if(!$blog){
@@ -94,17 +93,15 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
-        $blog = Blog::findOrFail($id);
+        $blog = Blog::query()->findOrFail($id);
         if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $extension = $file->getClientOriginalExtension();
-            $newFile = time() . "." . $extension;
-            $file->move(public_path('/images/blogImgs'), $newFile);
-        } else {
-            $newFile = $blog->image;
+            $newFile = $this->uploadImage($request->file('image'), 'blogImgs');
         }
+
+        $newFile = $blog->image;
+
         $editArr = [
             'name' => $request->name,
             'description' => $request->description,
@@ -119,10 +116,8 @@ class BlogController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param $id
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy($id)
     {

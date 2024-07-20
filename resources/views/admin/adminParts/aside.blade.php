@@ -15,7 +15,7 @@
                 </li>
                 <li  class=" side-item "><a href="{{route('admin.properties.index')}}"><i class="fas fa-angle-right mr-2"></i>Properties</a>
                 </li>
-                <li  class=" side-item "><a href="{{route('admin.blogs.category.category')}}"><i class="fas fa-angle-right mr-2"></i>Blogs' Categories</a>
+                <li  class=" side-item "><a href="{{route('admin.blog-categories.index')}}"><i class="fas fa-angle-right mr-2"></i>Blogs' Categories</a>
                 </li>
                 <li  class=" side-item "><a href="{{route('admin.blogs.index')}}"><i class="fas fa-angle-right mr-2"></i>Blogs</a>
                 </li>
