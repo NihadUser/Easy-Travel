@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\TourPlan;
+use App\Models\Tour;
 use Illuminate\Console\Command;
 use Carbon\Carbon;
 
@@ -31,7 +31,7 @@ class TourUpdate extends Command
     {
         $now = Carbon::now();
         $fullDate = "$now->year-$now->month-$now->day";
-        TourPlan::where('end_time', $fullDate)->update(['is_active' => 0]);
+        Tour::where('end_time', $fullDate)->update(['is_active' => 0]);
         $this->info('Tour statuses updated successfully.');
         // return Command::SUCCESS;
     }

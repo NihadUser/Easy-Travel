@@ -11,17 +11,28 @@ use App\Models\User;
 class TourItem extends Model
 {
     use HasFactory;
-    protected $table = 'tour_items';
-    protected $guarded = [];
-    public function places()
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'entity_type',
+        'entity_id',
+        'host_id',
+        'tour_id'
+    ];
+    public function hotel()
     {
-        return $this->hasOne(Place::class, 'id', 'entity_id');
+        return $this->hasOne(Property::class, 'id', 'entity_id');
     }
 
-    public function guides()
+    public function guide()
     {
         return $this->hasOne(User::class, 'id', 'entity_id')->where('role', 'guide');
     }
-    protected $with = ['places', 'guides'];
 
+    public function hotels()
+    {
+        return $this->hasMany(Property::class, 'id', 'entity_id');
+    }
 }

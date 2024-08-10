@@ -3,19 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\TourPlan;
+use App\Models\Tour;
 use Illuminate\Http\Request;
 
 class AdminTourController extends Controller
 {
     public function index()
     {
-        $tours = TourPlan::with('host')->paginate(6);
+        $tours = Tour::with('host')->paginate(6);
         return view('admin.tours.index', compact(['tours']));
     }
     public function editPage(Request $request, $id)
     {
-        $tour = TourPlan::query()->findOrFail($id);
+        $tour = Tour::query()->findOrFail($id);
         $places = json_decode($tour->travel_places);
         $transport = json_decode($tour->transport);
         $arr = [
@@ -140,7 +140,7 @@ class AdminTourController extends Controller
     }
     public function edit(Request $request, $id)
     {
-        $tour = TourPlan::findOrFail($id);
+        $tour = Tour::findOrFail($id);
         $request->validate([
             'name' => ['string'],
             'about' => ['string'],

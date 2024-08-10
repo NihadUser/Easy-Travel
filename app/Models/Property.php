@@ -49,4 +49,9 @@ class Property extends Model
         return $this->hasOne(PropertyFile::class, 'property_id', 'id')
             ->where('show_home', 1);
     }
+
+    public function tour_property()
+    {
+        return $this->hasOne(TourItem::class, 'entity_id', 'id');
+    }
 }

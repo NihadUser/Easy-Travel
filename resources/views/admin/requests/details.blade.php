@@ -33,20 +33,25 @@
                     <table class=" table table-hover ">
                         <tbody>
                             <thead>
+                            <th>Name</th>
                                 <th>
                                     Start Location
                                 </th>
-                                <th>Price</th>
+                                <th>Price . "AZN"</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
                                 <th>People Count</th>
-                                <th>Transport</th>
                                 <th>Places</th>
+                                <th>Gudies</th>
+                                <th>Transports</th>
                                 <th>
                                     Actions
                                 </th>
                             </thead>
                             <tbody>
+                            <td>
+                                {{$tour->name}}
+                            </td>
                                 <td>
                                     {{$tour->start_location}}
                                 </td>
@@ -63,18 +68,28 @@
                                     {{$tour->people}}
                                 </td>
                                     <td>
-                                            @foreach ($places as $item)
-                                            {{$item}}
+                                        <ul>
+                                            @foreach ($tour->hotels as $item)
+                                                <li>{{ $item->hotel->name }}</li>
                                             @endforeach
-                                        </td>
-                                    <td>
-                                        @foreach ($transport as $item)
-                                        {{$item}}
-                                        @endforeach
+                                        </ul>
                                     </td>
                                     <td>
-                                        <a href="{{route('admin.requests.tourApprove',['id'=>$tour->id])}}" class="editItem">Approve</a>
-                                        <a href="{{route('admin.requests.tourDelete',['id'=>$tour->id])}}" class="deleteItem">Decline</a>
+                                        <ul>
+                                            @foreach ($tour->guides as $item)
+                                                <ul>{{ $item->guide->name }}</ul>
+                                            @endforeach
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        @foreach ($tour->transports as $item)
+                                            {{ $item->name . "," }}
+                                        @endforeach
+                                    </td>
+
+                                    <td>
+                                        <a href="{{route('admin.requests.tourApprove', $tour->id)}}" class="editItem">Approve</a>
+                                        <a href="{{route('admin.requests.tourDelete', $tour->id) }}" class="deleteItem">Decline</a>
                                     </td>
                         </tbody>
                     </table>

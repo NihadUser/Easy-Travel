@@ -9,7 +9,7 @@
         <div class="auth">
             <form method="POST" enctype="multipart/form-data" action="{{ route('user.editProfile',['id'=>$user->id]) }}">
                 @csrf
-                
+
                 <div class="auth-1">
                     <label for="name"  class="col-md-4 col-form-label text-md-end">{{ __('Change user name') }}</label>
                     <div class="emailContainer">
@@ -68,7 +68,7 @@
         <div class="auth">
             <form method="POST" enctype="multipart/form-data" action="{{ route('user.editProfile',['id'=>$user->id]) }}">
                 @csrf
-                
+
                 <div class="auth-1">
                     <label for="name"  class="col-md-4 col-form-label text-md-end">{{ __('Change user name') }}</label>
                     <div class="emailContainer">
@@ -127,7 +127,7 @@
         <div class="auth guideAuth">
             <form method="POST" enctype="multipart/form-data" autofocus="off" action="{{ route('user.editGuide',['id'=>$user->id]) }}">
                 @csrf
-                
+
                 <div class="auth-1">
                     <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Change user name') }}</label>
                     <div class="emailContainer">
@@ -183,7 +183,7 @@
                     @foreach($languages as $item)
                     <option value="{{$item}}" selected>{{$item}}</option>
                     @endforeach
-                </select>                        
+                </select>
                 </div>
                 <div>
                     <label for="about">Change a information about you:</label>
@@ -223,7 +223,7 @@
                         <div>
                             <label for="aviable">Enter where you can aviable</label>
                         <select name="aviable[]" multiple id="aviable" class="styled-select">
-                        </select>                        
+                        </select>
                         </div>
                         <div>
                             <label for="about">Enter a information about you:</label>
@@ -250,31 +250,31 @@
                     <div class="guideForm">
                         @csrf
                         <div class="max-w-md bg-white p-8 rounded-lg shadow-lg">
-                    
+
                             <div class="mb-6">
                                 <label for="blogName" class="block text-sm font-medium text-gray-700 mb-2">Blog Name</label>
                                 <input type="text" id="blogName" name="blogName"
                                     class="block w-full p-3 border rounded-lg focus:outline-none focus:ring focus:border-blue-500">
                             </div>
-                    
+
                             <div class="mb-6">
                                 <label for="shortDescription" class="block text-sm font-medium text-gray-700 mb-2">Short Description</label>
                                 <textarea id="shortDescription" name="shortDescription" rows="4"
                                     class="block w-full p-3 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"></textarea>
                             </div>
-                    
+
                             <div class="mb-6">
                                 <label for="blogDescription" class="block text-sm font-medium text-gray-700 mb-2">Blog Description</label>
                                 <textarea id="blogDescription" name="blogDescription" rows="8"
                                     class="block w-full p-3 border rounded-lg focus:outline-none focus:ring focus:border-blue-500"></textarea>
                             </div>
-                    
+
                             <div class="mb-6">
                                 <label for="blogImage" class="block text-sm font-medium text-gray-700 mb-2">Blog Image</label>
                                 <input type="file" id="blogImage" name="blogImage"
                                     class="block imageUpload w-full p-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-500">
                             </div>
-                    
+
                             <button type="submit"
                                 class="bg-blue-500 text-white py-3 px-6 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-500">
                                 Create Blog
@@ -322,7 +322,7 @@
                 @elseif(auth()->user()->role=='guide' && $request !=null && $request->type=='host')
                 <a class="requestLink" ><div class="loader"></div></a>
                 @elseif(auth()->user()->role=='host')
-                <a href="{{route('tourPlan.plan1')}}" class="requestLink">Prepare tour</a>
+                <a href="{{ route('tourPlan.create')  }}" class="requestLink">Prepare tour</a>
                 @endif
                 @if(auth()->user()->role=='host' || auth()->user()->role=='guide')
                 <button class="blogWriterBtn">Write Blog</button>
@@ -464,12 +464,12 @@
                 </span>
             </div>
             <div id="UserTourContainer">
-                @foreach ($activeTour as $item)
+                @foreach ($activeTour ?? [] as $item)
                     <div  class="bookedProperty">
-                        <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->active->image)}}" alt="">
+                        <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->active->image ?? '')}}" alt="">
                         <div class="bookedPropertyContent">
                             <h3>
-                               <a href="{{route('home.tourDetails',['id'=>$item->id])}}"> {{$item->active->name}}</a>
+                               <a href="{{route('home.tourDetails',['id'=>$item->id])}}"> {{$item->active->name ?? ''}}</a>
                             </h3>
                             <div class="mainLocation mainLocation-2">
                                 <img src="{{asset('/images/plane.svg')}}" alt="">
@@ -490,7 +490,7 @@
                 @endforeach
             </div>
             <div id="pastUserTourContainer" class="nonActive">
-                @foreach ($pastTour as $item)
+                @foreach ($pastTour ?? [] as $item)
                 <div  class="bookedProperty">
                     <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->active->image)}}" alt="">
                     <div class="bookedPropertyContent">
@@ -534,7 +534,7 @@
         country.append(option);
         });
     })
-  
+
 </script>
 
 @if(auth()->user()->role=='user')

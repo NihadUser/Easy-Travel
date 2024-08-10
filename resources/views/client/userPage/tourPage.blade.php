@@ -41,7 +41,7 @@
         </thead>
         <tbody>
     @foreach($tour as $item)
-    
+
             <tr class="border-t">
                 <td class="px-4 py-2">
                     {{$loop->iteration}}
@@ -62,20 +62,20 @@
                     {{$item->start_location}}
                 </td>
                 <td class="px-4 py-2">
-                    <ul>
-                        @foreach(json_decode($item->travel_places) as $item2)
-                            <li>
-                                {{$item2}}
-                            </li>
-                        @endforeach
-                    </ul>
+{{--                    <ul>--}}
+{{--                        @foreach(json_decode($item->travel_places) as $item2)--}}
+{{--                            <li>--}}
+{{--                                {{$item2}}--}}
+{{--                            </li>--}}
+{{--                        @endforeach--}}
+{{--                    </ul>--}}
                 </td>
                 <td class="px-4 py-2">
-                    @foreach(json_decode($item->transport) as $item2)
-                        <li>
-                            {{$item2}}
-                        </li>
-                    @endforeach
+{{--                    @foreach(json_decode($item->transport) as $item2)--}}
+{{--                        <li>--}}
+{{--                            {{$item2}}--}}
+{{--                        </li>--}}
+{{--                    @endforeach--}}
                 </td>
                 <td class="px-4 py-2">
                     {{$item->start_time}} , {{$item->end_time}}

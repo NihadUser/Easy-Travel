@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{$title}}</title>
+    <title> @yield('title', 'Home Page') </title>
     <link rel="stylesheet" href="{{asset('/client/css/style.css')}}">
     <link rel="icon" type="image/x-icon" href="{{asset("/images/headerIcon.svg")}}">
      @if(Route::current()->uri=="home/place-details/{id}" || Route::current()->uri=="home/property-{id}-details" || Route::current()->uri=="user/tour_edit/{id}")

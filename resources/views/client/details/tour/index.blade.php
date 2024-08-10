@@ -4,26 +4,26 @@
     <div class="mainPackageContainer">
         <div class="packageLeftSide">
             <div class="packageContent-1">
-                <h1>{{$tour->name}} <img src="{{asset('/images/tourPlane.svg')}}" alt=""></h1>
-                <span>{{$tour->start_time}},{{$tour->end_time}}</span>
+                <h1>{{ $tour->name }} <img src="{{asset('/images/tourPlane.svg')}}" alt=""></h1>
+                <span>{{ $tour->start_time }},{{ $tour->end_time }}</span>
                 <span><span class="packagePrice">${{$tour->price}}/</span>person</span>
             </div>
             <div class="packageContent-2">
                 <h1>See who's going</h1>
                 {{-- @if(count($tourUsers)>0) --}}
                     <div class="tourUsersImages">
-                        @foreach ($tourUsers as $item)
+                        @foreach ($tourUsers ?? [] as $item)
                         <img src="{{asset('/images/userImgs/'.$item->user->image)}}" alt="">
                         @endforeach
                         @if(count($tourUsers)>4)
                         <div class="img5">
-    
+
                         </div>
                         @endif
                     </div>
                     {{-- @endif --}}
 
-                
+
             </div>
             <div class="TourInformations">
                 <div class="TourInformations-1">
@@ -41,11 +41,11 @@
                 </div>
                 <div class="TourInformations-2">
                     <h3>
-                        Target places visit ({{count($tourPlaces)}} Places)
+                        Target places visit ({{count($tour->hotels)}} Places)
                     </h3>
                     <ul>
-                        @foreach ($tourPlaces as $item)
-                        <li>{{$item}}</li>
+                        @foreach ($tour->hotels as $item)
+                        <li>{{ $item->hotel->name }}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -54,8 +54,8 @@
                         Meet Plan
                     </h3>
                     <ul>
-                        <li>Location: {{$tour->start_location}}</li>
-                        <li>Date: {{$tour->start_time}}</li>
+                        <li>Location: {{ $tour->start_location }}</li>
+                        <li>Date: {{ $tour->start_time }}</li>
                     </ul>
                 </div>
                 <div class="TourInformations-2">
@@ -63,8 +63,8 @@
                         Tour transport
                     </h3>
                     <ul>
-                        @foreach ($transport as $item)
-                        <li>{{$item}}</li>
+                        @foreach ($tour->transports as $item)
+                        <li>{{ $item->name }}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -79,23 +79,23 @@
             </div>
             <div class="packageContent-2">
                 <h2>
-                    Hotel\Resort to Stay ({{@count($hotels)}} Booked)
+                    Hotel\Resort to Stay ( {{ count($tour->hotels) }} Booked)
                 </h2>
-                @foreach ($hotels as $item)
+                @foreach ($tour->hotels as $item)
                 <div class="bookedPlacesContainer">
                     <div class="bookedPlaces">
-                            <img class="bookedPlaceImgs" src="{{ asset('/images/imgs/' . $item->places->image) }}" alt="">
+                            <img class="bookedPlaceImgs" src="{{ asset('/images/imgs/' . $item->hotel->image->image) }}" alt="">
                             <div class="bookedPlaceContent">
-                                <a href="{{route("home.place",['id'=>$item->places->id])}}">
-                                    <p>{{ $item->places->name }}</p>
+                                <a href="{{route("home.place", $item->hotel->id)}}">
+                                    <p>{{ $item->hotel->name }}</p>
                                 </a>
                                 <div class="mainLocation mainLocation-2">
                                     <img src="{{ asset('/images/recoloc.svg') }}" alt="">
-                                    {{ $item->places->location }}
+                                    {{ $item->hotel->location }}
                                 </div>
                                 <div>
                                     <span class="bookedPlacePrice">
-                                        {{ $item->places->price }}
+                                        {{ $item->hotel->price }}
                                     </span>
                                     <span>
                                         /Night
@@ -110,21 +110,21 @@
                 <h2>
                     Tour Guide
                 </h2>
-                @foreach ($guides as $item)
+                @foreach ($tour->guides as $item)
                 <div class="bookedPlacesContainer">
                     <div class="bookedPlaces">
-                        <img class="bookedPlacesImg" src="{{asset('/images/userImgs/'.$item->guides->image)}}" alt="">
+                        <img class="bookedPlacesImg" src="{{asset('/images/userImgs/'.$item->guide->image)}}" alt="">
                         <div class="bookedPlaceContent">
-                            <a href="{{route("home.guide",['id'=>$item->guides->id])}}">
-                                <p>{{$item->guides->name}}</p>
+                            <a href="{{route("home.guide",['id'=>$item->guide->id])}}">
+                                <p>{{$item->guide->name}}</p>
                             </a>
                             <div class="mainLocation mainLocation-2">
                                 <img src="{{asset('/images/recoloc.svg')}}" alt="">
-                                {{$item->guides->location}}
+                                {{$item->guide->location}}
                             </div>
                             <div>
                                 <span class="bookedPlacePrice">
-                                    {{$item->guides->guides->price}}$
+                                    {{$item->guide->guides->price}}$
                                 </span>
                                 <span>
                                     /Night
@@ -140,10 +140,10 @@
             <div class="mainTourHostContainer">
                 <div class="hostContainer">
                     <div class="tourHostContainer">
-                        <img src="{{{asset('/images/userImgs/'.$host->host->image)}}}" alt="">
+                        <img src="{{{asset('/images/userImgs/'. $tour->host->image)}}}" alt="">
                         <div class="tourHostInfoContent">
                             <h3>
-                                {{$host->host->name}}
+                                {{ $tour->host->name }}
                             </h3>
                             <span>
                                 Tour host
@@ -152,7 +152,7 @@
                     </div>
                     <div class="TourHostLinks">
                         <a class="tourLink1" href="">Make Call</a>
-                        <a class="tourLink2"@if($user==null) href="{{route('home.tourJoin',['id'=>$hostId])}}" @else href="{{route('tourPlan.tourError')}}" @endif>Join the Tour</a>
+                        <a class="tourLink2"@if($user==null) href="{{route('home.tourJoin',['id'=>$tour->host->id])}}" @else href="{{route('tourPlan.tourError')}}" @endif>Join the Tour</a>
                     </div>
                 </div>
                 <div class="RelatedToursContainer">

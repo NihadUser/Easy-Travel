@@ -1,3 +1,4 @@
+@section('title', 'Tour Plan Create First Step')
 @include('client.clientParts.header')
 @include('client.clientParts.nav2')
 <div class="main guideMain">
@@ -25,7 +26,7 @@
         </div>
         <div class="tourFormContainer">
             <div>
-                <form class="mainTourForm" enctype="multipart/form-data" method="POST" action="{{route('tourPlan.data')}}">
+                <form class="mainTourForm" enctype="multipart/form-data" method="POST" action="{{ route('tourPlan.store') }}">
                     @csrf
                     <div>
                         <label for="tourName">Enter tour name</label>
@@ -41,17 +42,17 @@
                     </div>
                     <div>
                         <label for="transport[]">Enter tour transport</label>
-                        <select name="transport[]" multiple id="">
-                           @foreach ($arr2 as $item)
-                               <option value="{{$item['name']}}">{{$item['name']}}</option>
+                        <select name="transports[]" multiple id="">
+                           @foreach ($tourTransports as $item)
+                               <option value="{{$item->id}}">{{ $item->name }}</option>
                            @endforeach
                         </select>
                     </div>
                     <div>
                         <label for="">Enter places you are going to travel </label>
                         <select name="places[]" multiple id="">
-                           @foreach ($arr as $item)
-                               <option value="{{$item['name']}}">{{$item['name']}}</option>
+                           @foreach ($tourPlaces as $item)
+                               <option value="{{$item->id}}">{{$item->name}}</option>
                            @endforeach
                         </select>
                     </div>
@@ -77,11 +78,11 @@
                         <label for="">Enter desctiption about tour</label>
                         <textarea name="about" name="" id="" cols="30" rows="10"></textarea>
                     </div>
-                    @if(Session::get('id')==null)
+                    @if(Session::get('id') == null)
                     <button type="submit">Save </button>
                     @endif
                     @if(Session::get('id'))
-                    <a href="{{route('tourPlan.plan2',['id'=>Session::get('id')])}}" class="nextTourLink">Next</a>
+                        <a href="{{route('tourPlan.plan2',['id'=>Session::get('id')])}}" class="nextTourLink">Next</a>
                     @endif
                 </form>
             </div>

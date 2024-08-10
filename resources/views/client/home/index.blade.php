@@ -1,3 +1,6 @@
+@php
+$title = 'Home';
+@endphp
 @include('client.clientParts.header')
 @include('client.clientParts.nav')
 <div class="root">

@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class TourPlace extends Model
 {
     use HasFactory;
-    protected $table = 'tour_places';
-    protected $guarded = [];
+
+    /**
+     * @var string[]
+     */
+    protected $fillable = [
+        'place_id',
+        'tour_id',
+    ];
 }

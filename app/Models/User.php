@@ -16,7 +16,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    
     /**
      * The attributes that are mass assignable.
      *
@@ -82,4 +82,9 @@ class User extends Authenticatable
         return $this->hasMany(Selection::class, 'user_id')->where('entity_type', 'guide');
     }
     protected $with = ['guides'];
+
+    public function tour_guide()
+    {
+        return $this->hasOne(TourItem::class, 'entity_id', 'id');
+    }
 }

@@ -30,12 +30,12 @@
             </div>
             <div class="row  m-1 pb-4 mb-3 ">
                 <div class="col-xs-12  col-sm-12  col-md-12  col-lg-12 p-2">
-                    
+
                     <table class="requestTable table table-hover ">
                         <tbody>
                             @foreach ($usersArr as $item)
                             <tr>
-                               
+
                                 <td>{{$item->users->name}} wants to be @if($item->type=='user') guide  @else {{$item->type}} @endif</td>
                                <td>
                                 <a @if($item->type=='user') href="{{route('admin.requests.approve2',['id'=>$item->id])}}" @elseif($item->type=='host') href='{{route("admin.requests.approve",['id'=>$item->users->id])}}' @endif class="editItem"><i class="fa-solid fa-check"></i></a>
@@ -45,12 +45,12 @@
                             @endforeach
                            @foreach($tour as $item)
                            <tr>
-                            @if($item->type=='tour')
+                            @if($item->status == 2)
                             <td>
-                                {{$item->user->name}} wants to create tour
+                                {{$item->name}} wants to create tour
                             </td>
                             <td>
-                                <a href="{{route('admin.requests.tourDetails',['id'=>$item->tours_id])}}" class="allImages">View details</a>
+                                <a href="{{route('admin.requests.tourDetails',['id'=>$item->id])}}" class="allImages">View details</a>
                             </td>
                             @endif
                            </tr>

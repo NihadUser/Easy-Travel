@@ -58,20 +58,20 @@
                                 <td>{{$item->name}}</td>
                                 <td>{{$item->price}}$</td>
                                 <td>{{$item->start_location}}</td>
-                                <td>
-                                    <ul class="">
-                                        @foreach (json_decode($item->travel_places) as $item2)
-                                        <li class="">{{$item2}}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
-                                <td>
-                                    <ul class="list-group">
-                                        @foreach (json_decode($item->transport) as $item2)
-                                        <li class="">{{$item2}}</li>
-                                        @endforeach
-                                    </ul>
-                                </td>
+{{--                                <td>--}}
+{{--                                    <ul class="">--}}
+{{--                                        @foreach (json_decode($item->travel_places ?? []) as $item2)--}}
+{{--                                        <li class="">{{$item2}}</li>--}}
+{{--                                        @endforeach--}}
+{{--                                    </ul>--}}
+{{--                                </td>--}}
+{{--                                <td>--}}
+{{--                                    <ul class="list-group">--}}
+{{--                                        @foreach (json_decode($item->transport ?? []) as $item2)--}}
+{{--                                        <li class="">{{$item2}}</li>--}}
+{{--                                        @endforeach--}}
+{{--                                    </ul>--}}
+{{--                                </td>--}}
                                 <td>
                                     {{$item->start_time}},
                                     {{$item->end_time}}

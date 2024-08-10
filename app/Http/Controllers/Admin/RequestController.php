@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\HostRequest;
 use App\Models\Request;
-use App\Models\TourPlan;
+use App\Models\Tour;
+use App\Models\TourTransaction;
 use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 class RequestController extends Controller
@@ -22,16 +24,17 @@ class RequestController extends Controller
         }
         $r_count = Request::all();
         $count = count($r_count);
-        $tour = HostRequest::with('tour')->with('user')->get();
+
+        $tour = Tour::query()
+            ->from('tours as tp')
+            ->select('tp.id', 'u.name', 'tp.status')
+            ->join('users as u', 'u.id', 'tp.host_id')
+            ->orderBy('id')
+            ->get();
+
         return view('admin.requests.index', compact(['users', 'requests', 'usersArr', 'tour', 'count']));
     }
-    public function tourDetails($id)
-    {
-        $tour = TourPlan::findOrFail($id);
-        $places = json_decode($tour->travel_places);
-        $transport = json_decode($tour->transport);
-        return view('admin.requests.details', compact(['tour', 'places', 'transport']));
-    }
+
     public function approve2($id)
     {
         $request = Request::where('id', $id)->first();
@@ -54,24 +57,50 @@ class RequestController extends Controller
             return back()->with('success', 'User role has uptaded to host');
         }
     }
+    public function tourDetails($id)
+    {
+        $tour = Tour::query()
+            ->with(['host', 'hotels.hotel', 'guides.guide', 'transaction'])
+            ->where('id', $id)
+            ->first();
+//        return $tour;
+        return view('admin.requests.details', compact(['tour']));
+    }
     public function tourApprove($id)
     {
-        $request = HostRequest::where('tours_id', $id)->first();
-        $request->update([
-            'type' => 'approveTour'
-        ]);
-        return redirect()->route('admin.requests.request')->with('success', 'You give the permission to create tour');
+         $request = Tour::query()
+            ->where('id', $id)
+            ->with('host')
+            ->first();
+
+        if(!$request) {
+            abort(404);
+        }
+
+        $request->update(['status' => 1]);
+
+        $link = to_route('tourPlan.create', ['id' => $request->id, 'step' => 2]);
+        $body = "Your tour has approved successfully please enter this link : <br>" . $link;
+
+        Mail::send('Mail.index', compact('body'), function ($mail) use ($request) {
+            $mail->to($request->host->email)->subject("Tour Plan Approved");
+        });
+
+
+        return to_route('admin.requests.request')->with("success", 'You give permission to create tour');
     }
+
     public function delete($id)
     {
-        $delete = Request::findOrFail($id);
+        $delete = Request::query()->findOrFail($id);
         $delete->delete();
         return back()->with('success', 'Request refused successfully');
     }
     public function tourDelete($id)
     {
-        $delete = HostRequest::where('tours_id', $id)->first();
-        $delete->delete();
+        $tour_plan = Tour::query()->findOrFail($id);
+        $tour_plan->delete();
+
         return back()->with('success', 'Tour deleted successfully!!');
     }
 

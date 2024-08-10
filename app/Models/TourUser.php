@@ -16,7 +16,7 @@ class TourUser extends Model
     }
     public function active()
     {
-        return $this->hasOne(TourPlan::class, 'id', 'tour_id');
+        return $this->hasOne(Tour::class, 'id', 'tour_id');
     }
 
 }

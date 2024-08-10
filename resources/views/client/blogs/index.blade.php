@@ -23,7 +23,7 @@
                         </a>
                     </h1>
                     <div class="blogShortDescription">
-                        {{$item->short_description}}  
+                        {{$item->short_description}}
                     </div>
                     <div class="blogCommentsView">
                         <img src="{{asset('/images/comments.svg')}}" alt="">
@@ -77,7 +77,7 @@
         btnMore[i].addEventListener("click", () => {
             description[i].classList.add("desc")
             btnMore[i].style.display = 'none'
-            
+
         })
     }
 </script>
@@ -87,7 +87,7 @@ const list = document.querySelectorAll("#categoryList li");
 const blogLeftSide=document.querySelector(".blogLeftSide");
 for (let i = 0; i < list.length; i++) {
     list[i].addEventListener("click", async (e) => {
-    
+
         let h1=document.createElement("h1")
         blogLeftSide.innerHTML='';
         h1.innerHTML=`Our ${list[i]} blogs`
@@ -103,7 +103,7 @@ for (let i = 0; i < list.length; i++) {
                     oneBlog.classList.add("oneBlog");
                     let img=document.createElement("img")
                     let singleUrl='{{route('blogs.blogDetails',':id')}}';
-                    singleUrl=singleUrl.replace(':id',blog.id);
+                    singleUrl = singleUrl.replace(':id',blog.id);
                     let a=document.createElement("a")
                     a.href=singleUrl;
                     a.append(img)

@@ -68,24 +68,24 @@
                             <div class="form-group">
                                 <label for="places">Travel Places</label>
                                 <select multiple name="places[]" class="form-control" id="productRating">
-                                    @foreach($arr as $item)
-                                        <option @foreach($places as $item2) @if($item2==$item['name']) selected @endif @endforeach value="{{$item['name']}}">{{$item['name']}}</option>
-                                    @endforeach
+{{--                                    @foreach($arr as $item)--}}
+{{--                                        <option @foreach($places as $item2) @if($item2==$item['name']) selected @endif @endforeach value="{{$item['name']}}">{{$item['name']}}</option>--}}
+{{--                                    @endforeach--}}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="transport">Transport</label>
                                 <select multiple name="transport[]" class="form-control" id="productRating">
-                                    @foreach ($arr2 as $item)
-                                        <option @foreach($transport as $item2) @if($item['name']==$item2) selected @endif @endforeach value="{{$item['name']}}">{{$item['name']}}</option>
-                                    @endforeach
+{{--                                    @foreach ($arr2 as $item)--}}
+{{--                                        <option @foreach($transport as $item2) @if($item['name']==$item2) selected @endif @endforeach value="{{$item['name']}}">{{$item['name']}}</option>--}}
+{{--                                    @endforeach--}}
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="image">Image </label>
                                 <input class="form-control" type="file" name="image" id="formFile">
                                 <img src="{{asset("/images/tourImgs/$tour->image")}}"  class="imageeee" alt="">
-                            </div> 
+                            </div>
                             <button type="submit" class="btn btn-primary">Edit Tour</button>
                         </form>
                     </div>

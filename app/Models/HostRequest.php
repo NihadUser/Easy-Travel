@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\TourPlan;
+use App\Models\Tour;
 use App\Models\User;
 
 class HostRequest extends Model
@@ -14,7 +14,7 @@ class HostRequest extends Model
     protected $guarded = [];
     public function tour()
     {
-        return $this->hasOne(TourPlan::class, 'id', 'tours_id');
+        return $this->hasOne(Tour::class, 'id', 'tours_id');
     }
     public function user()
     {

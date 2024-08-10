@@ -1,22 +1,25 @@
 <?php
 
 use App\Http\Controllers\AboutController;
-use App\Http\Controllers\client\BlogController;
-use App\Http\Controllers\client\CommentsController;
-use App\Http\Controllers\client\DetailsController;
-use App\Http\Controllers\client\HomeController;
-use App\Http\Controllers\client\PaymentController;
-use App\Http\Controllers\client\SearchController;
-use App\Http\Controllers\client\SelectionController;
-use App\Http\Controllers\client\TourController;
-use App\Http\Controllers\client\UserController;
+use App\Http\Controllers\Client\{
+    BlogController,
+    CommentsController,
+    DetailsController,
+    HomeController,
+    PaymentController,
+    SearchController,
+    SelectionController,
+    TourController,
+    UserController};
+use App\Http\Controllers\Client\Tour\TourController as ClientTourController;
+use App\Http\Controllers\Client\Tour\{HotelController, GuideController};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['as' => 'home.', 'prefix' => 'home'], function () {
     Route::get('/place-details/{id}', [DetailsController::class, 'place'])->name('place');
     Route::get('/property-{id}-details', [DetailsController::class, 'property'])->name('property');
-    Route::get('/tour-{id}-detalis', [TourController::class, 'tourDetails'])->name('tourDetails');
+    Route::get('/tour-{id}-detalis', [DetailsController::class, 'tourDetails'])->name('tourDetails');
     Route::get('/join-tour/{id}', [TourController::class, 'tourJoin'])->name('tourJoin');
     Route::group(['as' => 'comments.', 'prefix' => 'comments'], function () {
         Route::post("/place/{id}", [CommentsController::class, 'placeComment'])->name('placeComment');
@@ -46,16 +49,23 @@ Route::group(['as' => 'blogs.', 'prefix' => 'blogs'], function () {
     Route::post('/blogCreate', [BlogController::class, 'create'])->name('create');
     Route::get('/search', [BlogController::class, 'search'])->name('search');
 });
-Route::group(['as' => 'tourPlan.', 'prefix' => 'tourPlan', 'middleware' => 'host'], function () {
-    Route::get('/1', [TourController::class, 'index2'])->name('plan1');
-    Route::post('/data', [TourController::class, 'data'])->name('data');
-    Route::post('/placeAdd/{id}', [TourController::class, 'addPlace'])->name('tourPlacesAdd');
-    Route::get('/2', [TourController::class, 'places'])->name('plan2');
+
+Route::group(['as' => 'tourPlan.', 'prefix' => 'tour-plan', 'middleware' => 'host'], function () {
+
     Route::get('/tourApprove/{id}', [TourController::class, 'tourApprove'])->name('tourApprove');
-    Route::post('/guideAdd/{id}', [TourController::class, 'guideAdd'])->name('tourGuideAdd');
-    Route::get('/tour-plaace-delete/{id}', [TourController::class, 'tourPlaceDelete'])->name('tourPlaceDelete');
-    Route::get('/tourRequest/{id}', [TourController::class, 'tourReqeust'])->name('tourReqeust');
-    Route::get('/tourError', [TourController::class, 'tourError'])->name('tourError');
+
+    Route::post('/add-hotel/{id}', [HotelController::class, 'store'])->name('tourPlacesAdd');
+    Route::post('/add-guide/{id}', [GuideController::class, 'store'])->name('tourGuideAdd');
+    Route::get('/tour-place-delete/{id}', [TourController::class, 'tourPlaceDelete'])->name('tourPlaceDelete');
+    Route::post('/payAndPublish/{tour_id}', [PaymentController::class, 'payAndPublish'])->name('payAndPublish');
+
+    Route::get('/payment/{id}', [PaymentController::class, 'paymentPage'])->name('payment.page');
+
+    Route::get('/', [ClientTourController::class, 'index'])->name('index');
+    Route::get('/create', [ClientTourController::class, 'create'])->name('create');
+    Route::post('/store', [ClientTourController::class, 'store'])->name('store');
+    Route::get('/{tour}/edit', [ClientTourController::class, 'edit'])->name('edit');
+    Route::put('/{tour}', [ClientTourController::class, 'update'])->name('update');
 });
 Route::group(['as' => "user.", 'prefix' => 'user'], function () {
     Route::get('/{id}', [UserController::class, 'index'])->name('page');
@@ -86,5 +96,4 @@ Route::group(['as' => 'selection.', 'prefix' => 'selection'], function () {
 });
 
 
-
-Auth::routes();
+\Illuminate\Support\Facades\Auth::routes();

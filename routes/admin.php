@@ -36,9 +36,9 @@ Route::group(['as' => 'requests.', 'prefix' => "requests"], function () {
     Route::get("/", [RequestController::class, 'index'])->name('request');
     Route::get("/approve-host/{id}", [RequestController::class, 'approve'])->name('approve');
     Route::get('/aprrove/{id}', [RequestController::class, 'approve2'])->name('approve2');
+    Route::get('/delete/{id}', [RequestController::class, 'delete'])->name('delete');
     Route::get('/aprroveTour/{id}', [RequestController::class, 'tourApprove'])->name('tourApprove');
     Route::get('/deleteTour/{id}', [RequestController::class, 'tourDelete'])->name('tourDelete');
-    Route::get('/delete/{id}', [RequestController::class, 'delete'])->name('delete');
     Route::get('/tour-details/{id}', [RequestController::class, 'tourDetails'])->name("tourDetails");
 });
 
@@ -56,7 +56,6 @@ Route::group(['as' => 'bookings.', 'prefix' => 'bookings'], function () {
 
 
 Route::view('/notfound', 'client.errors.404')->name('notfound');
-
 
 //Route::get('/notfound', function () {
 //    return view('client.errors.404');

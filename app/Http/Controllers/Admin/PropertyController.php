@@ -40,7 +40,7 @@ class PropertyController extends Controller
      * @param StoreRequest $request
      * @return RedirectResponse
      */
-    public function store(StoreRequest $request)//: RedirectResponse
+    public function store(StoreRequest $request): RedirectResponse
     {
         $newFile = $this->uploadImage($request->file('image'), 'imgs');
         $property = Property::query()->create($request->validated());
