@@ -27,6 +27,12 @@
                 </li>
                 <li  class=" side-item "><a href="{{route('admin.requests.request')}}"><i class="fas fa-angle-right mr-2"></i>Requests @if(Route::current()->uri=='admin/requests') (<span>{{$count}}</span>) @endif</a>
                 </li>
+{{--                @can('add-role-perrmission')--}}
+                <li  class=" side-item "><a href="{{route('admin.roles.index')}}"><i class="fas fa-angle-right mr-2"></i>Roles</a>
+                </li>
+                <li  class=" side-item "><a href="{{route('admin.permissions.index')}}"><i class="fas fa-angle-right mr-2"></i>Permissions</a>
+                </li>
+{{--                @endcan--}}
             </div>
         </ul>
     </div>

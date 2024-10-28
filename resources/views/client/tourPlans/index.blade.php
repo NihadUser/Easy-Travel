@@ -1,9 +1,9 @@
 @include('client.clientParts.header')
 @include('client.clientParts.nav2')
-<div class="main ">
-    <table style="margin-top:50px;" class="min-w-full table-auto">
+<div class="main">
+    <table style="margin-top:50px;width: 100%;" class="table-auto">
         <thead>
-        <tr>
+        <tr class="border-t">
             <th class="px-4 py-2">
                 #
             </th>
@@ -12,9 +12,6 @@
             </th>
             <th>
                 Tour image
-            </th>
-            <th class="px-4 py-2">
-                Tour Description
             </th>
             <th class="px-4 py-2">
                 Tour Price
@@ -35,20 +32,17 @@
         </thead>
         <tbody>
         @foreach($tours as $item)
-
             <tr class="border-t">
                 <td class="px-4 py-2">
                     {{$loop->iteration}}
                 </td>
                 <td class="px-4 py-2">
-                    {{$item->name}}
+                    <a href="{{ route('tourPlan.edit', $item->id) }}">{{ $item->name }}</a>
                 </td>
                 <td>
                     <img style="height: 100px;width:100px;" class="userBlogTableImage" src="{{asset("/images/tourImgs/$item->image")}}" alt="">
                 </td>
-                <td style="font-size: 12px;width:25%;" class="px-4 py-2">
-                    {{$item->about}}
-                </td>
+
                 <td class="px-4 py-2">
                     {{$item->price}}
                 </td>
@@ -69,15 +63,20 @@
 {{--                    @if($item->status == 1)--}}
 {{--                        <span> </span>--}}
 {{--                    @else--}}
+                        <a href="{{ route('tourPlan.show', $item->id) }}" class="userBlogEdit"> <i class="fa fa-eye"></i> </a>
+                        <form action="{{ route('tourPlan.destroy', $item->id) }}" method="POST">
+                            @method("DELETE")
+                            @csrf
+                            <button type="submit" class="userBlogDelete">DELETE</button>
+                        </form>
+{{--                        <a href="" >Delete</a>--}}
                         <a href="{{route('user.editTour',['id'=>$item->id])}}" class="userBlogEdit">Edit</a>
-                        <a href="{{route('user.deleteTour',['id'=>$item->id])}}" class="userBlogDelete">Delete</a>
 {{--                    @endif--}}
                 </td>
             </tr>
         @endforeach
         </tbody>
     </table>
-    {{-- </div> --}}
 </div>
 <script>
     const blogCard = document.getElementById('blogCard');

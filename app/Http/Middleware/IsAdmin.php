@@ -16,7 +16,7 @@ class IsAdmin
      */
     public function handle(Request $request, Closure $next)
     {
-        if (auth()->user() && auth()->user()->role != 'admin') {
+        if (auth()->user()) {
             return $next($request);
         }
         return back()->with('error', 'Page not found!');

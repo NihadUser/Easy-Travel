@@ -25,7 +25,7 @@ class RequestController extends Controller
         $r_count = Request::all();
         $count = count($r_count);
 
-        $tour = Tour::query()
+        $tour = Tour::withTrashed()
             ->from('tours as tp')
             ->select('tp.id', 'u.name', 'tp.status')
             ->join('users as u', 'u.id', 'tp.host_id')
@@ -59,11 +59,11 @@ class RequestController extends Controller
     }
     public function tourDetails($id)
     {
-        $tour = Tour::query()
+        $tour = Tour::withTrashed()
             ->with(['host', 'hotels.hotel', 'guides.guide', 'transaction'])
             ->where('id', $id)
             ->first();
-//        return $tour;
+
         return view('admin.requests.details', compact(['tour']));
     }
     public function tourApprove($id)

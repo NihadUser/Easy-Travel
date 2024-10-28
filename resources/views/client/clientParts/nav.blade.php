@@ -29,7 +29,7 @@
             <a class="nav-link loginUserLink" href="{{ route('login') }}">{{ __('Login') }}</a>
         </li>
     @endif
-    
+
     @if (Route::has('register'))
         <li class="nav-item">
             <a class="nav-link registerUserLink" href="{{ route('register') }}">{{ __('Register') }}</a>
@@ -40,13 +40,9 @@
     <div class="navUser">
         <img class="userImage" src="{{asset("/images/userImgs/".Auth::user()->image)}}" alt="">
     <li class="nav-item dropdown">
-        @if(Auth::user()->role=='user' || Auth::user()->role=='guide' || Auth::user()->role=='host') 
+        @if(Auth::user()->role=='user' || Auth::user()->role=='guide' || Auth::user()->role=='host')
         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{route('user.page',['id'=>auth()->id()])}}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
             {{ Auth::user()->name }}
-        </a>
-        @elseif(Auth::user()->role=='admin')
-        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="{{route('admin.dashboard')}}" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-            {{ "Admin side" }}
         </a>
         @endif
         <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
@@ -55,7 +51,7 @@
                              document.getElementById('logout-form').submit();">
                 {{ __('Logout') }}
             </a>
-    
+
             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                 @csrf
             </form>

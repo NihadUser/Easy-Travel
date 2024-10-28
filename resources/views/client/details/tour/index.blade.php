@@ -10,10 +10,9 @@
             </div>
             <div class="packageContent-2">
                 <h1>See who's going</h1>
-                {{-- @if(count($tourUsers)>0) --}}
                     <div class="tourUsersImages">
                         @foreach ($tourUsers ?? [] as $item)
-                        <img src="{{asset('/images/userImgs/'.$item->user->image)}}" alt="">
+                        <img src="{{asset('/images/userImgs/'.$item->image)}}" alt="">
                         @endforeach
                         @if(count($tourUsers)>4)
                         <div class="img5">
@@ -21,9 +20,6 @@
                         </div>
                         @endif
                     </div>
-                    {{-- @endif --}}
-
-
             </div>
             <div class="TourInformations">
                 <div class="TourInformations-1">
@@ -152,7 +148,7 @@
                     </div>
                     <div class="TourHostLinks">
                         <a class="tourLink1" href="">Make Call</a>
-                        <a class="tourLink2"@if($user==null) href="{{route('home.tourJoin',['id'=>$tour->host->id])}}" @else href="{{route('tourPlan.tourError')}}" @endif>Join the Tour</a>
+                        <a class="tourLink2"@if($user == null) href="{{ route('home.tourJoin', $tour->id) }}" @else href="" @endif>Join the Tour</a>
                     </div>
                 </div>
                 <div class="RelatedToursContainer">

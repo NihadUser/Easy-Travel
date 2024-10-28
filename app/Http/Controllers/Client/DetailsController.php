@@ -80,9 +80,9 @@ class DetailsController extends Controller
 
 
         $recoProperty = Property::query()
-            ->inRandomOrder()
             ->with('image')
             ->limit(4)
+            ->inRandomOrder()
             ->get();
 
 
@@ -157,14 +157,16 @@ class DetailsController extends Controller
             ->where('role', 'guide')
             ->get();
 
-        $tourUsers = TourUser::query()->where('tour_id', $id)->with('user')->get();
+        $tourUsers = TourUser::query()
+                ->from('tour_users as tu')
+                ->select('tu.id', 'u.image')
+                ->join('users as u', 'u.id', 'tu.user_id')
+                ->where('tu.tour_id', $id)
+                ->get();
 
-        $user = TourUser::query()
-            ->where('tour_id', $id)
-            ->where('user_id', auth()->id())
-            ->first();
+        $user = TourUser::query()->where(['tour_id' => $id, 'user_id' => auth()->id()])->first();
 
-        $tour = Tour::query()
+        $tour = Tour::withTrashed()
             ->with(['hotels.hotel.image', 'guides.guide', 'host', 'transports'])
             ->where('id', $id)
             ->first();

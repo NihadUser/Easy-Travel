@@ -40,7 +40,7 @@ class HomeController extends Controller
             ->skip(0)->take(4)
             ->get();
 
-        $tours = Tour::query()
+        $tours = Tour::withTrashed()
             ->select('t.*', 'tt.status')
             ->from('tours as t')
             ->join('tour_transactions as tt', 'tt.tour_id',  't.id')

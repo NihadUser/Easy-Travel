@@ -125,7 +125,7 @@
                 @elseif($tourPlan->status == 2)
                     <h1>Tour saved your profile we turn back soon</h1>
                 @elseif($tourPlan->status == 1)
-                    <form method="POST" action="{{ route('tourPlan.tourPaymentPage', $tourPlan->id) }}">
+                    <form method="POST" action="{{ route('tourPlan.payAndPublish', $tourPlan->id) }}">
                         @csrf
                         <input name="price" value="{{ $value }}" type="hidden">
                         <button class="paymentLink">Pay and publish ($ {{ $value }})</button>
@@ -152,7 +152,7 @@
 
             searchTerm == '' ? searchTerm = 'null' : searchTerm;
 
-            let searchLink = 'http://127.0.0.1:8000/api/tour/place-search/' + searchTerm;
+            let searchLink = 'http://127.0.0.1:8000/api/tour/place-search/' + searchTerm + '/' + id;
             const response = await fetch(searchLink);
             const data = await response.json();
             let i = 1;

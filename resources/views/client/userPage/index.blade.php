@@ -118,6 +118,10 @@
 </div>
    @endif
    @if(auth()->user()->role=='guide')
+       @php
+           $languages = json_decode($user->guides->languages, true);
+           $aviable_for = json_decode($user->guides->aviable_for, true);
+       @endphp
 <div class="modalContainer">
    <div class="modal">
     <div class="modalColser">
@@ -332,7 +336,7 @@
                 @endif
                 <a ></a>
                 @if( $user->role=="host")
-                    <a  class="requestLink" href="{{route('user.userTour',['id'=>$user->id])}}">Tours</a>
+                    <a  class="requestLink" href="{{ route('tourPlan.index') }}">Tours</a>
                 @endif
             </div>
         </div>
@@ -352,17 +356,17 @@
             </div>
             <div class="bookedUserContainer">
                 <div id="bookedItem1">
-                       @foreach ($activeHotels as $item)
+                       @foreach ($activeHotelsBookings as $item)
                        <div  class="bookedProperty">
-                        <img class="bookedPropertyImage" src="{{asset('/images/imgs/'.$item->hotel->image)}}" alt="">
+                        <img class="bookedPropertyImage" src="{{ asset('/images/imgs/' . $item->image) }}" alt="">
                         <div class="bookedPropertyContent">
                             <h3>
-                                {{$item->hotel->name}}
+                                <a href="{{ route('home.property', $item->p_id) }}">{{ $item->name }}</a>
                             </h3>
                             <div class="mainLocation mainLocation-2">
                                 <img src="{{asset('/images/recoloc.svg')}}" alt="">
                                 <span>
-                                    {{$item->hotel->location}}
+                                    {{ $item->location }}
                                 </span>
                             </div>
                             <div class="bookedRated">
@@ -370,81 +374,93 @@
                             </div>
                             <span>
                                 <span class="propertyPrice">
-                                    {{$item->hotel->price}}$/
+                                    {{ $item->price }}$/
                                 </span>night
                             </span>
+                           <div>
+                               <span>{{ date('d/m/Y', strtotime($item->start_time)) }} - {{ date('d/m/Y', strtotime($item->start_time)) }}</span>
+                           </div>
                         </div>
                     </div>
                        @endforeach
                 </div>
                     <div  id="bookedItem2" class="nonActive">
-                        @foreach ($pastHotels as $item)
-                        <div class="bookedProperty ">
-                            <img class="bookedPropertyImage" src="{{asset('/images/imgs/'.$item->hotel->image)}}" alt="">
-                            <div class="bookedPropertyContent">
-                                <h3>
-                                    {{$item->hotel->name}}
-                                </h3>
-                                <div class="mainLocation mainLocation-2">
-                                    <img src="{{asset('/images/recoloc.svg')}}" alt="">
+                        @foreach ($pastHotelsBookings as $item)
+                            <div  class="bookedProperty">
+                                <img class="bookedPropertyImage" src="{{ asset('/images/imgs/' . $item->image) }}" alt="">
+                                <div class="bookedPropertyContent">
+                                    <h3>
+                                        <a href="{{ route('home.property', $item->p_id) }}">{{ $item->name }}</a>
+                                    </h3>
+                                    <div class="mainLocation mainLocation-2">
+                                        <img src="{{asset('/images/recoloc.svg')}}" alt="">
+                                        <span>
+                                         {{ $item->location }}
+                                        </span>
+                                    </div>
+                                    <div class="bookedRated">
+                                        <img src="{{asset("/images/homeStar.svg")}}" alt=""><span class="value">5.0</span>
+                                    </div>
                                     <span>
-                                        {{$item->hotel->location}}
+                                        <span class="propertyPrice">
+                                            {{ $item->price }}$/
+                                        </span>night
                                     </span>
+                                <div>
+                                    <span>{{ date('d/m/Y', strtotime($item->start_time)) }} - {{ date('d/m/Y', strtotime($item->start_time)) }}</span>
                                 </div>
-                                <div class="bookedRated">
-                                    <img src="{{asset("/images/homeStar.svg")}}" alt=""><span class="value">5.0</span>
                                 </div>
-                                <span>
-                                    <span class="propertyPrice">
-                                        {{$item->hotel->price}}$/
-                                    </span>night
-                                </span>
                             </div>
-                        </div>
                         @endforeach
                     </div>
             </div>
             <div class="bookedGuideContainer nonActive">
                 <div id="bookedItem3">
-                    @foreach ($activeGuides as $guide)
+                    @foreach ($activeGuideBookings as $guide)
                     <div class="oneGuideContainer">
                         <div class="recGuideImage">
-                            <img src="{{asset("/images/userImgs/".$guide->guide->image)}}"
+                            <img src="{{asset("/images/userImgs/".$guide->image)}}"
                                 alt="">
                         </div>
                         <div class="recGuideContent">
                             <h3>
-                                <a href="{{route('home.guide',['id'=>$guide->guide->id])}}">{{$guide->guide->name}}</a>
+                                <a href="{{route('home.guide', $guide->guide_id)}}"><b>{{ $guide->guide_name }}</b></a>
                             </h3>
                             <div class="mainLocation mainLocation-2">
-                                <img src="{{asset("/images/recoloc.svg")}}" alt=""> {{$guide->guide->location}}
+                                <img src="{{asset("/images/recoloc.svg")}}" alt=""> {{$guide->location}}
                             </div>
                             <div>
-                                <span class="guidePriceBlue">{{$guide->guide->guides->price}}$/</span>day
+                                <span class="guidePriceBlue">{{$guide->price}}$/</span>day
+                            </div>
+                            <div>
+                                <span>{{ date('d/m/Y', strtotime($guide->start_date)) }} - {{ date('d/m/Y', strtotime($guide->end_date)) }}</span>
                             </div>
                         </div>
                     </div>
                     @endforeach
                 </div>
                 <div id="bookedItem4" class="nonActive">
-                    @foreach ($pastGuides as $guide)
-                    <div class="oneGuideContainer">
-                        <div class="recGuideImage">
-                            <img src="{{asset("/images/userImgs/".$guide->guide->image)}}"
-                                alt="">
-                        </div>
-                        <div class="recGuideContent">
-                            <h3>
-                                <a href="{{route('home.guide',['id'=>$guide->guide->id])}}">{{$guide->guide->name}}</a>
-                            </h3>
-                            <div class="mainLocation mainLocation-2">
-                                <img src="{{asset("/images/recoloc.svg")}}" alt=""> {{$guide->guide->location}}
+                    @foreach ($pastGuideBookings as $guide)
+                        <div class="oneGuideContainer">
+                            <div class="recGuideImage">
+                                <img src="{{ asset("/images/userImgs/" . $guide->image) }}"
+                                     alt="">
                             </div>
-                            <div>
-                                <span class="guidePriceBlue">{{$guide->guide->guides->price}}$/</span>day
+                            <div class="recGuideContent">
+                                <h3>
+                                    <a href="{{ route('home.guide', $guide->guide_id) }}"><b>{{ $guide->guide_name }}</b></a>
+                                </h3>
+                                <div class="mainLocation mainLocation-2">
+                                    <img src="{{asset("/images/recoloc.svg")}}" alt=""> {{ $guide->location }}
+                                </div>
+                                <div>
+                                    <span class="guidePriceBlue">{{ $guide->price }}$/</span>day
+                                </div>
+                                <div>
+                                    <span>{{ date('d/m/Y', strtotime($guide->start_date)) }} - {{ date('d/m/Y', strtotime($guide->end_date)) }}</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     @endforeach
                 </div>
             </div>
@@ -466,15 +482,15 @@
             <div id="UserTourContainer">
                 @foreach ($activeTour ?? [] as $item)
                     <div  class="bookedProperty">
-                        <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->active->image ?? '')}}" alt="">
+                        <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->image ?? '')}}" alt="">
                         <div class="bookedPropertyContent">
                             <h3>
-                               <a href="{{route('home.tourDetails',['id'=>$item->id])}}"> {{$item->active->name ?? ''}}</a>
+                               <a href="{{ route('home.tourDetails', $item->tour_id) }}"> {{$item->name ?? ''}}</a>
                             </h3>
                             <div class="mainLocation mainLocation-2">
                                 <img src="{{asset('/images/plane.svg')}}" alt="">
                                 <span>
-                                    {{$item->active->start_location}}
+                                    {{$item->start_location}}
                                 </span>
                             </div>
                             <div class="bookedRated">
@@ -482,7 +498,7 @@
                             </div>
                             <span>
                                 <span class="propertyPrice">
-                                    {{$item->active->price}}$/
+                                    {{$item->price}}$/
                                 </span>night
                             </span>
                         </div>
@@ -491,28 +507,28 @@
             </div>
             <div id="pastUserTourContainer" class="nonActive">
                 @foreach ($pastTour ?? [] as $item)
-                <div  class="bookedProperty">
-                    <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->active->image)}}" alt="">
-                    <div class="bookedPropertyContent">
-                        <h3>
-                            <a href="{{route('home.tourDetails',['id'=>$item->id])}}"> {{$item->active->name}}</a>
-                         </h3>
-                        <div class="mainLocation mainLocation-2">
-                            <img src="{{asset('/images/plane.svg')}}" alt="">
+                    <div  class="bookedProperty">
+                        <img class="bookedPropertyImage" src="{{asset('/images/tourImgs/'.$item->image ?? '')}}" alt="">
+                        <div class="bookedPropertyContent">
+                            <h3>
+                                <a href="{{ route('home.tourDetails', $item->tour_id) }}"> {{$item->name ?? ''}}</a>
+                            </h3>
+                            <div class="mainLocation mainLocation-2">
+                                <img src="{{asset('/images/plane.svg')}}" alt="">
+                                <span>
+                                    {{$item->start_location}}
+                                </span>
+                            </div>
+                            <div class="bookedRated">
+                                <img src="{{asset("/images/homeStar.svg")}}" alt=""><span class="value">5.0</span>
+                            </div>
                             <span>
-                                {{$item->active->start_location}}
+                                <span class="propertyPrice">
+                                    {{$item->price}}$/
+                                </span>night
                             </span>
                         </div>
-                        <div class="bookedRated">
-                            <img src="{{asset("/images/homeStar.svg")}}" alt=""><span class="value">5.0</span>
-                        </div>
-                        <span>
-                            <span class="propertyPrice">
-                                {{$item->active->price}}$/
-                            </span>night
-                        </span>
                     </div>
-                </div>
             @endforeach
             </div>
         </div>

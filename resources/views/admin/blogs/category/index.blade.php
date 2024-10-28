@@ -52,6 +52,7 @@
                             <tr>
                                 <th scope="col">Id</th>
                                 <th scope="col">Name</th>
+                                <th scope="col">Created At</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>
@@ -59,7 +60,8 @@
                            @foreach($category as $item)
                            <tr>
                                 <td>{{$loop->iteration}}</td>
-                                <td>{{$item->name}}</td>
+                               <td>{{$item->name}}</td>
+                               <td>{{ date('d/m/Y', strtotime($item->name)) }}</td>
                                 <td>
 {{--                                    <a href="{{route('admin.blogs.category.categoryDelete',['id'=>$item->id])}}" class="deleteItem">Delete</a>--}}
                                     <form action="{{ route('admin.blog-categories.destroy', $item->id) }}" method="POST">

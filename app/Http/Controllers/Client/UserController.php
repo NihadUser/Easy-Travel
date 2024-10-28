@@ -20,92 +20,86 @@ class UserController extends Controller
 {
     public function index($id)
     {
-        $today = Carbon::now();
-        $todayFormatted = $today->toDateString();
-        $day = explode('-', $todayFormatted);
-        $aviable_for = null;
-        $languages = null;
-        $bookings = BookProperty::query()->where('user_id', $id)->with('hotel')->get();
-        $guideBookings = GuideBook::query()->where('user_id', $id)->get();
-        $tour = TourUser::query()->where('user_id', $id)->with('active')->get();
-        $guideBookings = GuideBook::query()->where('user_id', $id)->with('guide')->get();
-        $bookings = BookProperty::query()->where('user_id', $id)->with('hotel')->get();
-        $activeHotels = [];
-        $pastHotels = [];
-        $activeGuides = [];
-        $pastGuides = [];
-        $pastTour = [];
-        $activeTour = [];
-        foreach ($tour as $item) {
-            if ($item->active->is_active ?? 2 == 1) {
-                $activeTour[] = $item;
-            }
-            if ($item->active->is_active ?? 2 == 0) {
-                $pastTour[] = $item;
-            }
-        }
-        foreach ($guideBookings as $item) {
-            $guideEndTime = $item->end_date;
-            $finish = explode('-', $guideBookings);
-            if ($day[2] == $finish[2]) {
-                $booking = GuideBook::findOrFail($item->id);
-                $booking->update([
-                    'is_active' => 1
-                ]);
-            }
-        }
-        foreach ($bookings as $item) {
-            $bookingEndTime = $item->end_time;
-            $end = explode("-", $bookingEndTime);
-            if ($day[2] == $end[2]) {
-                $update = BookProperty::findOrFail($item->id);
-                $update->update([
-                    'is_active' => 1
-                ]);
-            }
-        }
-        foreach ($guideBookings as $item) {
-            if ($item->is_active == 0) {
-                $activeGuides[] = $item;
-            }
-            if ($item->is_active == 1) {
-                $pastGuides[] = $item;
-            }
-        }
-        foreach ($bookings as $item) {
-            if ($item->is_active == 0) {
-                $activeHotels[] = $item;
-            }
-            if ($item->is_active == 1) {
-                $pastHotels[] = $item;
-            }
-        }
-        if (auth()->user()->role == 'guide') {
-            $user = User::with('guides')->with('blogs')->where('id', auth()->id())->where('role', 'guide')->first();
-            $language = $user->guides->languages;
-            $languages = json_decode($language, true);
-            $aviable = $user->guides->aviable_for;
-            $aviable_for = json_decode($aviable);
-        } elseif (auth()->user()->role == 'user') {
-            $user = User::findOrFail($id);
-        } elseif (auth()->user()->role == 'host') {
-            $user = User::findOrFail($id);
 
-        }
+        $activeHotelsBookings = $this->hotelBookings(0);
+        $pastHotelsBookings = $this->hotelBookings(1);
+
+        $activeGuideBookings = $this->guideBookings(0);
+        $pastGuideBookings = $this->guideBookings(1);
+
+        $activeTour = $this->tours(1);
+        $pastTour = $this->tours(0);
+
+        $user = User::query()->findOrFail($id);
+
         $requests = User::with('requests')->where('id', $id)->first();
+
         $request = $requests->requests;
-        $image = $user->image;
-        if ($user->role == 'host') {
-            $tour = Tour::where('host_id', auth()->id())->get();
-        }
-        $title = $user->name;
-        if ($aviable_for && $aviable_for != null && $languages && $languages != null) {
-            return view('client.userPage.index', compact(['user', 'title', 'request', 'image', 'pastGuides', 'activeGuides', 'activeHotels', 'pastHotels', 'activeTour', 'pastTour', 'aviable_for', 'languages']));
-        } elseif ($user->role == 'host') {
-            return view('client.userPage.index', compact(['user', 'title', 'request', 'activeGuides', 'tour', 'pastGuides', 'activeHotels', 'pastHotels', 'activeTour', 'pastTour']));
-        } else {
-            return view('client.userPage.index', compact(['user', 'title', 'request', 'activeGuides', 'activeHotels', 'pastGuides', 'pastHotels', 'activeTour', 'pastTour']));
-        }
+
+
+        return view('client.userPage.index', compact([
+            'user',
+            'request',
+            'activeGuideBookings',
+            'pastGuideBookings',
+            'activeHotelsBookings',
+            'pastHotelsBookings',
+            'activeTour',
+            'pastTour'
+        ]));
+    }
+
+    private function hotelBookings($status)
+    {
+        return BookProperty::query()
+            ->from('book_properties as bp')
+            ->select(
+                'p.name',
+                'p.price',
+                'p.location',
+                'pf.image',
+                'p.id as p_id'
+            )
+            ->join('properties as p', 'p.id', 'bp.hotel_id')
+            ->join('property_files as pf', function ($propertyFile){
+                $propertyFile->on('pf.property_id', 'p.id')->where('pf.show_home', 1);
+            })
+            ->where(['bp.user_id' => auth()->id(), 'bp.is_active' => $status])
+            ->get();
+    }
+
+    private function guideBookings($status)
+    {
+        return GuideBook::query()
+            ->from('guide_books as gb')
+            ->select(
+                'gb.id as guide_order_id',
+                'u.id as user_id',
+                'gb.start_date',
+                'gb.end_date',
+                'u2.name as guide_name',
+                'u2.id as guide_id',
+                'gi.price',
+                'u2.image',
+                'u2.location',
+            )
+            ->join('users as u', 'u.id', 'gb.user_id')
+            ->join('users as u2', function ($guides){
+                $guides->on('u2.id', 'gb.guide_id')->where('u2.role', 'guide');
+            })
+            ->join('guide_infos as gi', 'gi.user_id', 'guide_id')
+            ->where(['gb.user_id' => auth()->id(), 'gb.is_active' => $status])
+            ->get();
+    }
+
+    private function tours($status)
+    {
+        return TourUser::query()
+            ->from('tour_users as tu')
+            ->select('t.name', 't.price', 't.start_time', 't.id as tour_id', 't.start_location', 't.image')
+            ->join('tours as t', 't.id', 'tu.tour_id')
+            ->where(['tu.user_id' => auth()->id(), 't.status' => $status])
+            ->get();
     }
     public function request($id)
     {
@@ -269,7 +263,7 @@ class UserController extends Controller
     }
     public function tourEdit($id)
     {
-        $blog = Tour::findOrFail($id);
+        $blog = Tour::withTrashed()->findOrFail($id);
         $title = "Edit Tour";
         return view('client.userPage.editTour', compact('blog', 'title'));
     }

@@ -107,20 +107,19 @@ class HotelController extends Controller
         //
     }
 
-    public function search($keyword = 'null')
+    public function search($keyword = 'null', $tour_id)
     {
         $hotels = Property::query()
             ->from('properties as p')
-            ->select('p.id', 'p.name', 't.id as item_id')
-            ->leftJoin(DB::raw('(select * from tour_items where entity_type = "place") as ti'),
+            ->select('p.id', 'p.name')
+            ->leftJoin(DB::raw("(select entity_type, entity_id, tour_id from tour_items where entity_type = 'place' and tour_id = $tour_id) as ti"),
                 'ti.entity_id', '=', 'p.id')
-            ->leftJoin('tours as t', 't.id', '=', 'ti.tour_id')
-            ->whereNull('t.id');
+            ->leftJoin('tours as t', 't.id', '=', 'ti.tour_id');
 
         if($keyword != 'null'){
             $hotels = $hotels->where(DB::raw('LOWER(p.name)'), 'like', '%' . $keyword . '%');
         }
-        $hotels = $hotels->orderBy('name')->get();
+        $hotels = $hotels->whereNull('t.id')->orderBy('name')->get();
 
         return response()->json([
             'data' => $hotels

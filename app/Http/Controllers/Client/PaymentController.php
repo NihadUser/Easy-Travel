@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use App\Models\BookProperty;
-use App\Models\GuideBook;
-use App\Models\Property;
-use App\Models\Tour;
-use App\Models\TourTransaction;
-use App\Models\User;
+use App\Http\Requests\Client\Tour\Pay\StoreRequest;
+use App\Models\{BookProperty, GuideBook, Property, Tour, TourTransaction, User};
 use Illuminate\Http\Request;
 
 class PaymentController extends Controller
@@ -93,7 +89,7 @@ class PaymentController extends Controller
     public function payAndPublish($tour_id, Request $request)
     {
         $price = $request->price;
-        $tour = Tour::query()->findOrFail($tour_id);
+        $tour = Tour::withTrashed()->findOrFail($tour_id);
 
         TourTransaction::query()
             ->create([
@@ -103,24 +99,36 @@ class PaymentController extends Controller
                 'status' => 0
             ]);
 
-        return view('client.payment.index', compact(['tour', 'price']));
+        return to_route('tourPlan.payment.page', $tour->id)->with('price', $price);
+
     }
 
     public function paymentPage($tour_id)
     {
-        $tour = Tour::query()->findOrFail($tour_id);
-
-        $transaction = TourTransaction::query()
-            ->where(['tour_id' => $tour_id, 'user_id' => auth()->id(), 'status' => 0])
+        $tour = Tour::withTrashed()
+            ->from('tours as t')
+            ->select('t.*', 'tr.price')
+            ->join('tour_transactions as tr', 'tr.tour_id', 't.id')
+            ->where('tour_id', $tour_id)
             ->first();
 
-        if (!$transaction) {
-            return back()->with('error', "Not found");
-        }
-        $price = $transaction->price;
+        return view('client.payment.index', compact(['tour']))->with('price', $tour->price);
+    }
 
-        return view('client.payment.index', compact(['tour', 'price']));
+    public function paymentStore($id, StoreRequest $request)
+    {
+        $transaction = TourTransaction::query()
+            ->where('tour_id', $id)
+            ->where('user_id', auth()->id())
+            ->where('status', 0)
+            ->first();
 
+        $transaction->update([
+            'status' => 1,
+            'price' => $request->price
+        ]);
+
+        return to_route('tourPlan.approved');
 
     }
 }

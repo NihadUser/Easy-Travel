@@ -66,13 +66,13 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item"> <img src="{{asset("/images/userImgs/".Auth::user()->image)}}" alt="..."
+            <li class="nav-item"> <img src="{{asset("/images/userImgs/profileImage.png")}}" alt="..."
                     class="rounded-circle screen-user-profile"></li>
             <li class="nav-item">
                 <div class="dropdown">
                     <button class="btn  dropdown-toggle m-0" type="button" id="dropdownMenu4"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{Auth::user()->name}}
+                        {{Auth::guard('admin')->user()->name}}
                     </button>
                     <div aria-labelledby="dropdownMenu4"
                         class="dropdown-menu dropdown-menu-right dropdown-menu dropdown-menu-right"
@@ -83,18 +83,17 @@
                                 class="fas fa-moon fa-sm c-main mr-2"></i>Dark Mode</button>
                         <button class="dropdown-item" type="button"><i
                                 class="fas fa-cog fa-sm c-main mr-2"></i>Setting</button>
-                                @guest
-                                @else
+
                         <button class="dropdown-item" type="button"><i
                                 class="fas fa-sign-out-alt c-main fa-sm mr-2"></i><a style="color: #757575" class="" href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                               document.getElementById('logout-form').submit();">
                                  {{ __('Sign Out') }}
                              </a></button>
-                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                             <form id="logout-form" action="{{ route('admin.login.destroy', Auth::guard("admin")->user()->id) }}" method="POST" class="d-none">
+                                 @method('DELETE')
                                 @csrf
                             </form>
-                             @endguest
                     </div>
                 </div>
             </li>

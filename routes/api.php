@@ -12,6 +12,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tour-hotels/{tour_id}', [HotelController::class, 'index']);
     Route::get('/tour-guides/{id}', [GuideController::class, 'index']);
-    Route::get('/tour/place-search/{keyword}', [HotelController::class, 'search']);
+    Route::get('/tour/place-search/{keyword}/{tour_id}', [HotelController::class, 'search']);
 //});
 

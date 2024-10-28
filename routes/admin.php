@@ -1,20 +1,21 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\{
-    AdminController,
+use App\Http\Controllers\Admin\{AdminController,
     AdminTourController,
     AdminUserController,
     PropertyImageController,
     RequestController,
     PlaceController,
     PlaceImageController,
+    PermissionController,
+    RoleController,
     UserController,
     PropertyController,
     BlogController,
     CategoryController,
-    BlogCommentController
-};
+    BlogCommentController,
+    LoginController};
 
 /* Invokable Controllers */
 Route::get('/dashboard', AdminController::class)->name('dashboard');
@@ -29,8 +30,11 @@ Route::resources([
     'blogs' => BlogController::class,
     'blog-categories' => CategoryController::class,
     'blog-comments' => BlogCommentController::class,
+    'roles' => RoleController::class,
+    'permissions' => PermissionController::class,
 ]);
 
+Route::resource('login', LoginController::class);
 
 Route::group(['as' => 'requests.', 'prefix' => "requests"], function () {
     Route::get("/", [RequestController::class, 'index'])->name('request');

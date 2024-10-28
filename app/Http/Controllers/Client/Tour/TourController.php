@@ -21,7 +21,7 @@ class TourController extends Controller
      */
     public function index(): Factory|View|Application
     {
-        $tours = Tour::query()->where('host_id', auth()->id())->get();
+        $tours = Tour::withTrashed()->where('host_id', auth()->id())->get();
 
         return view('client.tourPlans.index', compact('tours'));
     }
@@ -74,7 +74,11 @@ class TourController extends Controller
      */
     public function show($id)
     {
-        //
+        $tour = Tour::query()
+            ->with(['hotels.hotel', 'guides.guide', 'transports', 'places'])
+            ->findOrFail($id);
+
+        return view('client.tourPlans.show', compact('tour'));
     }
 
     /**
@@ -83,7 +87,7 @@ class TourController extends Controller
      */
     public function edit($id): Factory|View|Application
     {
-        $tourPlan = Tour::query()->where('host_id', auth()->id())->findOrFail($id);
+        $tourPlan = Tour::withTrashed()->where('host_id', auth()->id())->findOrFail($id);
 
         $addedHotels = DB::table('properties as p')
             ->select('p.id','p.name', 'p.location', 'p.price', 'ti.tour_id', 'pf.image',
@@ -129,7 +133,7 @@ class TourController extends Controller
      */
     public function update($id): RedirectResponse
     {
-        $tour = Tour::query()->findOrFail($id);
+        $tour = Tour::withTrashed()->findOrFail($id);
         $update = $tour->update(['status' => TourStatus::WAITING]);
 
         if ($update) {
@@ -146,7 +150,15 @@ class TourController extends Controller
      */
     public function destroy($id)
     {
-        //
+         $tour = Tour::query()->withCount('users')->findOrFail($id);
+
+         if($tour->users_count === 0) {
+            DB::table('tours')->where('id', $id)->delete();
+         }
+         $tour->delete();
+
+         return back()->with('success', 'Tour has been deleted!');
+
     }
 }
 

@@ -299,14 +299,13 @@ class TourController extends Controller
     }
     public function tourJoin($id)
     {
-        if (auth()->user()) {
-            $insert = TourUser::create([
-                'user_id' => auth()->id(),
-                'tour_id' => $id
-            ]);
-            if ($insert) {
-                return back()->with('success', "You paid tour's price,We make contact with you as soon as!!");
-            }
+        $insert = TourUser::query()->create([
+            'user_id' => auth()->id(),
+            'tour_id' => $id
+        ]);
+
+        if ($insert) {
+            return back()->with('success', "You paid tour's price, We make contact with you as soon as!!");
         }
     }
 

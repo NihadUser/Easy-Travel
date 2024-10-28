@@ -10,10 +10,18 @@ use App\Http\Controllers\Client\{
     SearchController,
     SelectionController,
     TourController,
-    UserController};
+    UserControllerResource,
+    UserController
+};
 use App\Http\Controllers\Client\Tour\TourController as ClientTourController;
 use App\Http\Controllers\Client\Tour\{HotelController, GuideController};
 use Illuminate\Support\Facades\Route;
+
+Route::get('/ammemedov', function (){
+    $place = \App\Models\Place::query()->findOrFail(9);
+   \App\Events\OrderPlaces::dispatch($place);
+});
+Route::resource('nihad', UserControllerResource::class);
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::group(['as' => 'home.', 'prefix' => 'home'], function () {
@@ -60,12 +68,16 @@ Route::group(['as' => 'tourPlan.', 'prefix' => 'tour-plan', 'middleware' => 'hos
     Route::post('/payAndPublish/{tour_id}', [PaymentController::class, 'payAndPublish'])->name('payAndPublish');
 
     Route::get('/payment/{id}', [PaymentController::class, 'paymentPage'])->name('payment.page');
+    Route::post('/payment/{id}', [PaymentController::class, 'paymentStore'])->name('payment.store');
+    Route::view('/approved', 'client.tourPlans.tour3')->name('approved');
 
     Route::get('/', [ClientTourController::class, 'index'])->name('index');
     Route::get('/create', [ClientTourController::class, 'create'])->name('create');
     Route::post('/store', [ClientTourController::class, 'store'])->name('store');
     Route::get('/{tour}/edit', [ClientTourController::class, 'edit'])->name('edit');
     Route::put('/{tour}', [ClientTourController::class, 'update'])->name('update');
+    Route::get('/{id}', [ClientTourController::class, 'show'])->name('show');
+    Route::delete('/{id}', [ClientTourController::class, 'destroy'])->name('destroy');
 });
 Route::group(['as' => "user.", 'prefix' => 'user'], function () {
     Route::get('/{id}', [UserController::class, 'index'])->name('page');
